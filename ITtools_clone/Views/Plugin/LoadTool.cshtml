@@ -1,0 +1,12 @@
+﻿@{
+    ViewData["Title"] = ViewBag.PluginName;
+}
+
+@if (!string.IsNullOrEmpty(ViewBag.PluginUI))
+{
+    @Html.Raw(ViewBag.PluginUI)
+}
+else
+{
+    <p>Plugin not found.</p>
+}
