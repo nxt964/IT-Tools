@@ -12,5 +12,23 @@ namespace ITtools_clone
         public DbSet<Category> Categories { get; set; }
         public DbSet<Admin> Admins { get; set; }
         public DbSet<Favorite> Favorites { get; set; }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<Favorite>()
+                .HasKey(f => new { f.UserId, f.ToolId }); // Thiết lập khóa chính tổng hợp
+
+            modelBuilder.Entity<Favorite>()
+                .HasOne<User>()  // Thiết lập quan hệ với User
+                .WithMany()
+                .HasForeignKey(f => f.UserId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<Favorite>()
+                .HasOne<Tool>()  // Thiết lập quan hệ với Tool
+                .WithMany()
+                .HasForeignKey(f => f.ToolId)
+                .OnDelete(DeleteBehavior.Cascade);
+        }
     }
 }

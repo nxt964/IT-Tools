@@ -6,6 +6,7 @@
     <title>@ViewData["Title"] - ITtools_clone</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/auth.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/ITtools_clone.styles.css" asp-append-version="true" />
     <link href="~/lib/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet" />
     <link href="~/lib/bootstrap-icons/font/bootstrap-icons.min.css" rel="stylesheet" />
@@ -176,7 +177,11 @@
                         </a>
                     </div>
                 </div>
-                <input type="text" id="search-box" placeholder="Search...">
+                <div>
+                    <input type="text" id="search-box" placeholder="Search...">
+                    <a asp-controller="Auth" asp-action="Login" class="btn btn-primary">Đăng nhập</a>
+                    <a asp-controller="Auth" asp-action="Register" class="btn btn-primary">Đăng ký</a>
+                </div>
             </header>
             <div id="content">
                 @RenderBody()

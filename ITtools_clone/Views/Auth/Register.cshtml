@@ -1,0 +1,26 @@
+@{
+    ViewData["Title"] = "Đăng ký";
+}
+
+<h2>Đăng ký tài khoản</h2>
+
+<form class="auth-container" method="post" asp-action="Register">
+    <div>
+        <label for="username">Tên đăng nhập:</label>
+        <input type="text" id="username" name="Username" required />
+    </div>
+    <div>
+        <label for="email">Email:</label>
+        <input type="email" id="email" name="Email" required />
+    </div>
+    <div>
+        <label for="password">Mật khẩu:</label>
+        <input type="password" id="password" name="Password" required />
+    </div>
+    <div>
+        <label for="confirmPassword">Nhập lại mật khẩu:</label>
+        <input type="password" id="confirmPassword" name="ConfirmPassword" required />
+    </div>
+    <button type="submit">Đăng ký</button>
+    <p>Đã có tài khoản? <a asp-controller="Auth" asp-action="Login">Đăng nhập</a></p>
+</form>

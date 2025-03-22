@@ -14,7 +14,6 @@ namespace ITtools_clone
 
             // Lấy chuỗi kết nối từ appsettings.json
             string connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? string.Empty;
-            Console.WriteLine($"🔹 Connection string: {connectionString}");
 
             // Đăng ký Entity Framework Core với MySQL
             builder.Services.AddDbContext<AppDbContext>(options =>
