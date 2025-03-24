@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using BCrypt.Net;
 using ITtools_clone.Models;
 using ITtools_clone;
+using Microsoft.AspNetCore.Http;
 
 public class AuthController : Controller
 {
@@ -37,8 +38,13 @@ public class AuthController : Controller
         }
 
         // Lưu trạng thái đăng nhập bằng Session
+        int isAdmin = 0;
         HttpContext.Session.SetInt32("UserId", user.usid);
         HttpContext.Session.SetString("Username", user.username);
+        if(user.is_admin == true){
+            isAdmin = 1;
+        }
+        HttpContext.Session.SetInt32("isAdmin", isAdmin);
 
         return RedirectToAction("Index", "Home"); // Chuyển hướng về trang chủ
     }

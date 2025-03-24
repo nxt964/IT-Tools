@@ -1,0 +1,19 @@
+@{
+    ViewData["Title"] = "Thêm Tool Mới";
+}
+
+<h2>Thêm Tool Mới</h2>
+
+<form asp-controller="Plugin" asp-action="UploadTool" method="post" enctype="multipart/form-data" class="upload-form">
+    <div class="form-group">
+        <label for="toolName">Tên Tool:</label>
+        <input type="text" name="toolName" class="form-control" required>
+    </div>
+
+    <div class="form-group">
+        <label for="file">Chọn File DLL:</label>
+        <input type="file" name="file" class="form-control-file" required>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Tải lên</button>
+</form>

@@ -150,6 +150,11 @@
             </div>
 
             <div class="nav-container">
+                 @if (Context.Session.GetInt32("UserId") != null && Context.Session.GetInt32("isAdmin") == 1){
+                    <a asp-controller="Plugin" asp-action="AddTool" class="btn" style="border: 1px solid gray;margin:4px; border-radius: 5px;">
+                        Thêm công cụ
+                    </a>
+                }
                 <ul class="nav flex-column">
                     @await Component.InvokeAsync("PluginsList")
 

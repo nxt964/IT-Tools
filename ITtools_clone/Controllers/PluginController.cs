@@ -5,6 +5,39 @@ using ToolInterface;
 
 public class PluginController : Controller
 {
+  private readonly string pluginPath = Path.Combine(Directory.GetCurrentDirectory(), "Plugins");
+
+    [HttpGet]
+    public IActionResult AddTool()
+    {
+        return View();
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> UploadTool(string toolName, IFormFile file)
+    {
+        if (file == null || file.Length == 0)
+        {
+            ViewBag.Error = "Vui lòng chọn file DLL.";
+            return View("AddTool");
+        }
+
+        if (!Directory.Exists(pluginPath))
+        {
+            Directory.CreateDirectory(pluginPath);
+        }
+
+        string filePath = Path.Combine(pluginPath, file.FileName);
+
+        using (var stream = new FileStream(filePath, FileMode.Create))
+        {
+            await file.CopyToAsync(stream);
+        }
+
+        ViewBag.Message = "Tool đã được tải lên thành công!";
+        return View("AddTool");
+    }
+
     [Route("{pluginSlugName}")]
     public IActionResult LoadTool(string pluginSlugName)
     {
