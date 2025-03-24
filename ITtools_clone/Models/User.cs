@@ -1,11 +1,15 @@
+using System.ComponentModel.DataAnnotations;
+
 namespace ITtools_clone.Models
 {
     public class User
     {
-        public int Id { get; set; }
-        public string Username { get; set; }
-        public string Password { get; set; }
-        public string FullName { get; set; }
-        public bool Premium { get; set; }
+        [Key]
+        public int usid { get; set; }
+        public string username { get; set; }
+        public string password { get; set; }
+        public string email { get; set; }
+        public bool premium { get; set; }
+        public bool is_admin { get; set; }
     }
 }

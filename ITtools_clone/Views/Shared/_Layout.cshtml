@@ -177,10 +177,17 @@
                         </a>
                     </div>
                 </div>
-                <div>
+                <div class="d-flex align-items-center">
                     <input type="text" id="search-box" placeholder="Search...">
-                    <a asp-controller="Auth" asp-action="Login" class="btn btn-primary">Đăng nhập</a>
+                    @if (Context.Session.GetInt32("UserId") != null)
+                    {
+                        <p class="mx-2">Xin chào, @Context.Session.GetString("Username")</p>
+                        <a asp-controller="Auth" asp-action="Logout" class="btn btn-danger">Đăng xuất</a>
+                    }
+                    else{
+                    <a asp-controller="Auth" asp-action="Login" class="btn btn-primary mx-2">Đăng nhập</a>
                     <a asp-controller="Auth" asp-action="Register" class="btn btn-primary">Đăng ký</a>
+                }
                 </div>
             </header>
             <div id="content">

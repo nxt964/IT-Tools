@@ -1,7 +1,16 @@
 using Microsoft.AspNetCore.Mvc;
+using BCrypt.Net;
+using ITtools_clone.Models;
+using ITtools_clone;
 
 public class AuthController : Controller
 {
+    private readonly AppDbContext _context;
+
+    public AuthController(AppDbContext context)
+    {
+        _context = context;
+    }
     // Hiển thị trang đăng nhập
     public IActionResult Login()
     {
@@ -9,17 +18,32 @@ public class AuthController : Controller
     }
 
     [HttpPost]
-    public IActionResult Login(string Email, string Password)
+    public IActionResult Login(string email, string Password)
     {
-        if (Email == "admin@example.com" && Password == "123456")
+        // Tìm user theo email
+        var user = _context.Users.FirstOrDefault(u => u.email == email);
+        if (user == null)
         {
-            return RedirectToAction("Index", "Home"); // Chuyển hướng về trang chính nếu đăng nhập thành công
+            ViewBag.Error = "Email không tồn tại!";
+            return View();
         }
 
-        ViewBag.Error = "Email hoặc mật khẩu không đúng!";
-        return View();
+        // Kiểm tra mật khẩu
+        bool isPasswordValid = BCrypt.Net.BCrypt.Verify(Password, user.password);
+        if (!isPasswordValid)
+        {
+            ViewBag.Error = "Mật khẩu không chính xác!";
+            return View();
+        }
+
+        // Lưu trạng thái đăng nhập bằng Session
+        HttpContext.Session.SetInt32("UserId", user.usid);
+        HttpContext.Session.SetString("Username", user.username);
+
+        return RedirectToAction("Index", "Home"); // Chuyển hướng về trang chủ
     }
 
+   
     // Hiển thị trang đăng ký
     public IActionResult Register()
     {
@@ -35,6 +59,43 @@ public class AuthController : Controller
             return View();
         }
 
-        return RedirectToAction("Login"); // Chuyển hướng sang trang đăng nhập sau khi đăng ký thành công
+        // Kiểm tra Email đã tồn tại chưa
+        if (_context.Users.Any(u => u.email == Email))
+        {
+            ViewBag.Error = "Email đã tồn tại!";
+            return View();
+        }
+
+        // Kiểm tra Username đã tồn tại chưa
+        if (_context.Users.Any(u => u.username == Username))
+        {
+            ViewBag.Error = "Username đã tồn tại!";
+            return View();
+        }
+
+        // Hash mật khẩu trước khi lưu vào database
+        string hashedPassword = BCrypt.Net.BCrypt.HashPassword(Password);
+
+        // Tạo đối tượng User và lưu vào database
+        var user = new User
+        {
+            username = Username,
+            email = Email,
+            password = hashedPassword,
+            premium = false, // Set default value for Premium
+            is_admin = false // Set default value for Admin
+        };
+
+        _context.Users.Add(user);
+        _context.SaveChanges(); // Lưu vào database
+
+        return RedirectToAction("Login"); // Chuyển hướng sang trang đăng nhập
+    }
+
+        // Đăng xuất
+    public IActionResult Logout()
+    {
+        HttpContext.Session.Clear();
+        return RedirectToAction("Login");
     }
 }

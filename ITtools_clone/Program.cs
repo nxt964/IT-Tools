@@ -19,6 +19,9 @@ namespace ITtools_clone
             builder.Services.AddDbContext<AppDbContext>(options =>
                 options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString)));
 
+            // Cấu hình Session
+            builder.Services.AddSession();
+            builder.Services.AddHttpContextAccessor();
 
             // Đăng ký Repository & Service
             builder.Services.AddScoped<IToolRepository, ToolRepository>();
@@ -27,9 +30,6 @@ namespace ITtools_clone
             builder.Services.AddScoped<IUserRepository, UserRepository>();
             builder.Services.AddScoped<IUserService, UserService>();
 
-            builder.Services.AddScoped<IAdminRepository, AdminRepository>();
-            builder.Services.AddScoped<IAdminService, AdminService>();
-            
             var app = builder.Build();
 
             // Kiểm tra kết nối đến MySQL TRƯỚC KHI CHẠY ỨNG DỤNG
@@ -61,6 +61,7 @@ namespace ITtools_clone
                 app.UseHsts();
             }
 
+            app.UseSession(); // Kích hoạt session
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseRouting();

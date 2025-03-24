@@ -34,11 +34,12 @@ namespace ITtools_clone.Repositories
             {
                 users.Add(new User
                 {
-                    Id = reader.GetInt32("usid"),
-                    Username = reader.GetString("username"),
-                    Password = reader.GetString("password"),
-                    FullName = reader.GetString("fullname"),
-                    Premium = reader.GetBoolean("premium")
+                    usid = reader.GetInt32("usid"),
+                    username = reader.GetString("username"),
+                    password = reader.GetString("password"),
+                    email = reader.GetString("email"),
+                    premium = reader.GetBoolean("premium"),
+                    is_admin = reader.GetBoolean("is_admin")
                 });
             }
             return users;
