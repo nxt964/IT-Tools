@@ -34,13 +34,12 @@ namespace ITtools_clone.Repositories
             {
                 tools.Add(new Tool
                 {
-                    Id = reader.GetInt32("tid"),
-                    Name = reader.GetString("tool_name"),
-                    Description = reader.GetString("description"),
-                    Enabled = reader.GetBoolean("enabled"),
-                    PremiumRequired = reader.GetBoolean("premium_required"),
-                    PathTool = reader.GetString("pathtool"),
-                    CategoryId = reader.GetInt32("category_id")
+                    tid = reader.GetInt32("tid"),
+                    tool_name = reader.GetString("tool_name"),
+                    description = reader.GetString("description"),
+                    enabled = reader.GetBoolean("enabled"),
+                    premium_required = reader.GetBoolean("premium_required"),
+                    category_name = reader.GetString("category_name")
                 });
             }
             return tools;

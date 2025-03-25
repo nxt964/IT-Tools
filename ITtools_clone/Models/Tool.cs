@@ -1,13 +1,15 @@
+using System.ComponentModel.DataAnnotations;
+
 namespace ITtools_clone.Models
 {
     public class Tool
     {
-        public int Id { get; set; }
-        public string Name { get; set; }
-        public string Description { get; set; }
-        public bool Enabled { get; set; }
-        public bool PremiumRequired { get; set; }
-        public string PathTool { get; set; }
-        public int? CategoryId { get; set; }
+        [Key]
+        public int tid { get; set; }
+        public string? tool_name { get; set; }
+        public string? description { get; set; }
+        public bool enabled { get; set; }
+        public bool premium_required { get; set; }
+        public string? category_name { get; set; }
     }
 }

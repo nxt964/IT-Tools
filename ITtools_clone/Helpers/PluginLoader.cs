@@ -38,9 +38,9 @@ public static class PluginLoader
         _watcher.EnableRaisingEvents = true;
     }
 
-    private static void LoadPlugin(string filePath)
+    public static ITool? LoadPlugin(string filePath)
     {
-        if (_loadedAssemblies.ContainsKey(filePath)) return;
+        if (_loadedAssemblies.ContainsKey(filePath)) return null;
 
         try
         {
@@ -58,6 +58,7 @@ public static class PluginLoader
                     _plugins.Add(plugin);
                     _loadedAssemblies[filePath] = (context, assembly);
                     Console.WriteLine($"🔌 Plugin loaded: {plugin.Name}");
+                    return plugin;
                 }
             }
         }
@@ -65,6 +66,8 @@ public static class PluginLoader
         {
             Console.WriteLine($"❌ Error loading plugin: {ex.Message}");
         }
+
+        return null;
     }
 
 

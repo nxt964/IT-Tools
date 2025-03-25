@@ -10,7 +10,6 @@ namespace ITtools_clone
 
         public DbSet<User> Users { get; set; }
         public DbSet<Tool> Tools { get; set; }
-        public DbSet<Category> Categories { get; set; }
         public DbSet<Favorite> Favorites { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -18,6 +17,9 @@ namespace ITtools_clone
             modelBuilder.Entity<User>()
                 .HasIndex(u => u.usid)
                 .IsUnique(); 
+            modelBuilder.Entity<Tool>()
+                .HasIndex(t => t.tid)
+                .IsUnique();
 
             modelBuilder.Entity<Favorite>()
                 .HasKey(f => new { f.UserId, f.ToolId }); // Thiết lập khóa chính tổng hợp
