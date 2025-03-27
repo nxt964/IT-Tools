@@ -164,7 +164,7 @@ namespace ITtools_clone.Controllers
                 return NotFound();
             }
 
-            user.premium = premium;
+            user.premium = !user.premium;
             _userService.UpdateUser(user);
             
             return RedirectToAction("ManageUsers");
