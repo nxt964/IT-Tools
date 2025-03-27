@@ -51,14 +51,14 @@ public class PluginController : Controller
             return View("AddTool");
         }
 
-        // Save the plugin details to the database
         var tool = new Tool
         {
             tool_name = plugin.Name,
             description = plugin.Description,
             enabled = true,
             premium_required = false,
-            category_name = plugin.Category
+            category_name = plugin.Category,
+            file_name = file.FileName 
         };
 
         try 
@@ -69,6 +69,16 @@ public class PluginController : Controller
         catch (Exception ex)
         {
             ViewBag.Error = ex.Message;
+            
+            // Clean up file if database save failed
+            try
+            {
+                System.IO.File.Delete(filePath);
+            }
+            catch
+            {
+                // Ignore deletion errors
+            }
         }
         
         return View("AddTool");

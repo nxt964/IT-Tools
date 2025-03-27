@@ -11,5 +11,6 @@ namespace ITtools_clone.Models
         public bool enabled { get; set; }
         public bool premium_required { get; set; }
         public string? category_name { get; set; }
+        public string? file_name { get; set; }
     }
 }

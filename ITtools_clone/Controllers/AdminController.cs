@@ -3,6 +3,8 @@ using ITtools_clone.Models;
 using ITtools_clone.Services;
 using Microsoft.AspNetCore.Http;
 using System.Collections.Generic;
+using System;
+using System.IO;
 
 namespace ITtools_clone.Controllers
 {
@@ -92,7 +94,45 @@ namespace ITtools_clone.Controllers
                 return RedirectToAction("Login", "Auth");
             }
 
-            _toolService.DeleteTool(id);
+            // Get tool from database
+            var tool = _toolService.GetToolById(id);
+            if (tool == null)
+            {
+                return NotFound();
+            }
+
+            try
+            {
+                if (!string.IsNullOrEmpty(tool.file_name))
+                {
+                    string pluginsPath = Path.Combine(Directory.GetCurrentDirectory(), "Plugins");
+                    string filePath = Path.Combine(pluginsPath, tool.file_name);
+                    
+                    if (System.IO.File.Exists(filePath))
+                    {
+                        try
+                        {
+                            System.IO.File.Delete(filePath);
+                            Console.WriteLine($"Deleted plugin file: {filePath}");
+                        }
+                        catch (Exception ex)
+                        {
+                            Console.WriteLine($"Error deleting file: {ex.Message}");
+                            // Consider marking for later deletion if file is locked
+                        }
+                    }
+                }
+
+                _toolService.DeleteTool(id);
+
+                TempData["SuccessMessage"] = "Tool and associated files deleted successfully.";
+            }
+            catch (Exception ex)
+            {
+                TempData["ErrorMessage"] = $"Error deleting tool: {ex.Message}";
+                Console.WriteLine($"Error in DeleteTool: {ex.Message}");
+            }
+            
             return RedirectToAction("ManageTools");
         }
 
