@@ -1,21 +1,25 @@
 using ITtools_clone.Models;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
+using ITtools_clone.Services;
 
 namespace ITtools_clone.Controllers
 {
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
+        private readonly IToolService _toolService;
 
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(ILogger<HomeController> logger, IToolService toolService)
         {
             _logger = logger;
+            _toolService = toolService;
         }
 
         public IActionResult Index()
         {
-            return View();
+            var categorizedTools = _toolService.GetCategorizedTools();
+            return View(categorizedTools);
         }
 
         public IActionResult Privacy()

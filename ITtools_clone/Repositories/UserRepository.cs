@@ -1,48 +1,70 @@
 using System.Collections.Generic;
-using System.Data;
-using MySql.Data.MySqlClient;
+using System.Linq;
 using ITtools_clone.Models;
-using Microsoft.Extensions.Configuration;
+using Microsoft.EntityFrameworkCore;
 
 namespace ITtools_clone.Repositories
 {
     public interface IUserRepository
     {
         List<User> GetAllUsers();
+        User GetUserById(int id);
+        User GetUserByEmail(string email);
+        User GetUserByUsername(string username);
+        void AddUser(User user);
+        void UpdateUser(User user);
+        void DeleteUser(int id);
     }
 
     public class UserRepository : IUserRepository
     {
-        private readonly string _connectionString;
+        private readonly AppDbContext _context;
 
-        public UserRepository(IConfiguration configuration)
+        public UserRepository(AppDbContext context)
         {
-            _connectionString = configuration.GetConnectionString("DefaultConnection") ?? "";
+            _context = context;
         }
 
         public List<User> GetAllUsers()
         {
-            var users = new List<User>();
+            return _context.Users.ToList();
+        }
 
-            using var connection = new MySqlConnection(_connectionString);
-            connection.Open();
+        public User GetUserById(int id)
+        {
+            return _context.Users.Find(id);
+        }
 
-            using var command = new MySqlCommand("SELECT * FROM users", connection);
-            using var reader = command.ExecuteReader();
+        public User GetUserByEmail(string email)
+        {
+            return _context.Users.FirstOrDefault(u => u.email == email);
+        }
 
-            while (reader.Read())
+        public User GetUserByUsername(string username)
+        {
+            return _context.Users.FirstOrDefault(u => u.username == username);
+        }
+
+        public void AddUser(User user)
+        {
+            _context.Users.Add(user);
+            _context.SaveChanges();
+        }
+
+        public void UpdateUser(User user)
+        {
+            _context.Entry(user).State = EntityState.Modified;
+            _context.SaveChanges();
+        }
+
+        public void DeleteUser(int id)
+        {
+            var user = _context.Users.Find(id);
+            if (user != null)
             {
-                users.Add(new User
-                {
-                    usid = reader.GetInt32("usid"),
-                    username = reader.GetString("username"),
-                    password = reader.GetString("password"),
-                    email = reader.GetString("email"),
-                    premium = reader.GetBoolean("premium"),
-                    is_admin = reader.GetBoolean("is_admin")
-                });
+                _context.Users.Remove(user);
+                _context.SaveChanges();
             }
-            return users;
         }
     }
 }

@@ -1,48 +1,58 @@
 using System.Collections.Generic;
-using System.Data;
-using MySql.Data.MySqlClient;
+using System.Linq;
 using ITtools_clone.Models;
-using Microsoft.Extensions.Configuration;
+using Microsoft.EntityFrameworkCore;
 
 namespace ITtools_clone.Repositories
 {
     public interface IToolRepository
     {
         List<Tool> GetAllTools();
+        Tool GetToolById(int id);
+        void AddTool(Tool tool);
+        void UpdateTool(Tool tool);
+        void DeleteTool(int id);
     }
 
     public class ToolRepository : IToolRepository
     {
-        private readonly string _connectionString;
+        private readonly AppDbContext _context;
 
-        public ToolRepository(IConfiguration configuration)
+        public ToolRepository(AppDbContext context)
         {
-            _connectionString = configuration.GetConnectionString("DefaultConnection") ?? "";
+            _context = context;
         }
 
         public List<Tool> GetAllTools()
         {
-            var tools = new List<Tool>();
+            return _context.Tools.ToList();
+        }
 
-            using var connection = new MySqlConnection(_connectionString);
-            connection.Open();
+        public Tool? GetToolById(int id)
+        {
+            return _context.Tools.Find(id);
+        }
 
-            using var command = new MySqlCommand("SELECT * FROM tools", connection);
-            using var reader = command.ExecuteReader();
+        public void AddTool(Tool tool)
+        {
+            _context.Tools.Add(tool);
+            _context.SaveChanges();
+        }
 
-            while (reader.Read())
+        public void UpdateTool(Tool tool)
+        {
+            _context.Entry(tool).State = EntityState.Modified;
+            _context.SaveChanges();
+        }
+
+        public void DeleteTool(int id)
+        {
+            var tool = _context.Tools.Find(id);
+            if (tool != null)
             {
-                tools.Add(new Tool
-                {
-                    tid = reader.GetInt32("tid"),
-                    tool_name = reader.GetString("tool_name"),
-                    description = reader.GetString("description"),
-                    enabled = reader.GetBoolean("enabled"),
-                    premium_required = reader.GetBoolean("premium_required"),
-                    category_name = reader.GetString("category_name")
-                });
+                _context.Tools.Remove(tool);
+                _context.SaveChanges();
             }
-            return tools;
         }
     }
 }

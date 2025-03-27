@@ -9,7 +9,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ToolInterface", "..\ToolInt
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TokenGenerator", "..\TokenGenerator\TokenGenerator.csproj", "{836467A9-34CB-473B-B2F8-3A28D1C233CD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HashText", "..\HashText\HashText.csproj", "{3F87C5DD-67B1-48E5-B718-1DCE06C820CA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HashText", "..\HashText\HashText.csproj", "{3F87C5DD-67B1-48E5-B718-1DCE06C820CA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IntegerBaseConverter", "..\IntegerBaseConverter\IntegerBaseConverter.csproj", "{344C5637-516B-49A9-96D8-635A9D87B55F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,6 +35,10 @@ Global
 		{3F87C5DD-67B1-48E5-B718-1DCE06C820CA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3F87C5DD-67B1-48E5-B718-1DCE06C820CA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3F87C5DD-67B1-48E5-B718-1DCE06C820CA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{344C5637-516B-49A9-96D8-635A9D87B55F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{344C5637-516B-49A9-96D8-635A9D87B55F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{344C5637-516B-49A9-96D8-635A9D87B55F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{344C5637-516B-49A9-96D8-635A9D87B55F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

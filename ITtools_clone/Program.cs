@@ -23,12 +23,13 @@ namespace ITtools_clone
             builder.Services.AddSession();
             builder.Services.AddHttpContextAccessor();
 
-            // Đăng ký Repository & Service
-            builder.Services.AddScoped<IToolRepository, ToolRepository>();
-            builder.Services.AddScoped<IToolService, ToolService>();
-
+            // Register repositories
             builder.Services.AddScoped<IUserRepository, UserRepository>();
+            builder.Services.AddScoped<IToolRepository, ToolRepository>();
+
+            // Register services
             builder.Services.AddScoped<IUserService, UserService>();
+            builder.Services.AddScoped<IToolService, ToolService>();
 
             var app = builder.Build();
 

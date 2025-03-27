@@ -1,18 +1,19 @@
 ﻿using ITtools_clone.Helpers;
 using Microsoft.AspNetCore.Mvc;
 using ITtools_clone.Models;
-using ITtools_clone;
+using ITtools_clone.Services;
 using Microsoft.AspNetCore.Http;
 using System.IO;
+using System.Threading.Tasks;
+
 public class PluginController : Controller
 {
     private readonly string pluginPath = Path.Combine(Directory.GetCurrentDirectory(), "Plugins");
+    private readonly IToolService _toolService;
 
-    private readonly AppDbContext _context;
-
-    public PluginController(AppDbContext context)
+    public PluginController(IToolService toolService)
     {
-        _context = context;
+        _toolService = toolService;
     }
 
     [HttpGet]
@@ -56,14 +57,20 @@ public class PluginController : Controller
             tool_name = plugin.Name,
             description = plugin.Description,
             enabled = true,
-            premium_required = false, // Set default value for PremiumRequired
+            premium_required = false,
             category_name = plugin.Category
         };
 
-        _context.Tools.Add(tool);
-        _context.SaveChanges();
+        try 
+        {
+            _toolService.AddTool(tool);
+            ViewBag.Message = "Tool đã được tải lên thành công!";
+        }
+        catch (Exception ex)
+        {
+            ViewBag.Error = ex.Message;
+        }
         
-        ViewBag.Message = "Tool đã được tải lên thành công!";
         return View("AddTool");
     }
 

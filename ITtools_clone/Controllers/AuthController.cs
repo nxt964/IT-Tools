@@ -1,18 +1,17 @@
 using Microsoft.AspNetCore.Mvc;
-using BCrypt.Net;
 using ITtools_clone.Models;
-using ITtools_clone;
+using ITtools_clone.Services;
 using Microsoft.AspNetCore.Http;
 
 public class AuthController : Controller
 {
-    private readonly AppDbContext _context;
+    private readonly IUserService _userService;
 
-    public AuthController(AppDbContext context)
+    public AuthController(IUserService userService)
     {
-        _context = context;
+        _userService = userService;
     }
-    // Hiển thị trang đăng nhập
+
     public IActionResult Login()
     {
         return View();
@@ -21,36 +20,29 @@ public class AuthController : Controller
     [HttpPost]
     public IActionResult Login(string email, string Password)
     {
-        // Tìm user theo email
-        var user = _context.Users.FirstOrDefault(u => u.email == email);
+        var user = _userService.GetUserByEmail(email);
         if (user == null)
         {
             ViewBag.Error = "Email không tồn tại!";
             return View();
         }
 
-        // Kiểm tra mật khẩu
-        bool isPasswordValid = BCrypt.Net.BCrypt.Verify(Password, user.password);
-        if (!isPasswordValid)
+        if (!_userService.ValidateUserLogin(email, Password))
         {
             ViewBag.Error = "Mật khẩu không chính xác!";
             return View();
         }
 
-        // Lưu trạng thái đăng nhập bằng Session
-        int isAdmin = 0;
         HttpContext.Session.SetInt32("UserId", user.usid);
         HttpContext.Session.SetString("Username", user.username);
-        if(user.is_admin == true){
-            isAdmin = 1;
+        if (user.is_admin)
+        {
+            HttpContext.Session.SetInt32("isAdmin", 1);
         }
-        HttpContext.Session.SetInt32("isAdmin", isAdmin);
 
-        return RedirectToAction("Index", "Home"); // Chuyển hướng về trang chủ
+        return RedirectToAction("Index", "Home");
     }
 
-   
-    // Hiển thị trang đăng ký
     public IActionResult Register()
     {
         return View();
@@ -65,43 +57,35 @@ public class AuthController : Controller
             return View();
         }
 
-        // Kiểm tra Email đã tồn tại chưa
-        if (_context.Users.Any(u => u.email == Email))
+        if (_userService.GetUserByEmail(Email) != null)
         {
             ViewBag.Error = "Email đã tồn tại!";
             return View();
         }
 
-        // Kiểm tra Username đã tồn tại chưa
-        if (_context.Users.Any(u => u.username == Username))
+        if (_userService.GetUserByUsername(Username) != null)
         {
             ViewBag.Error = "Username đã tồn tại!";
             return View();
         }
 
-        // Hash mật khẩu trước khi lưu vào database
-        string hashedPassword = BCrypt.Net.BCrypt.HashPassword(Password);
-
-        // Tạo đối tượng User và lưu vào database
         var user = new User
         {
             username = Username,
             email = Email,
-            password = hashedPassword,
-            premium = false, // Set default value for Premium
-            is_admin = false // Set default value for Admin
+            premium = false,
+            is_admin = false
         };
 
-        _context.Users.Add(user);
-        _context.SaveChanges(); // Lưu vào database
+        _userService.RegisterUser(user, Password);
 
-        return RedirectToAction("Login"); // Chuyển hướng sang trang đăng nhập
+        return RedirectToAction("Login");
     }
 
-        // Đăng xuất
+    // Đăng xuất
     public IActionResult Logout()
     {
         HttpContext.Session.Clear();
-        return RedirectToAction("Login");
+        return RedirectToAction("Index", "Home");
     }
 }
