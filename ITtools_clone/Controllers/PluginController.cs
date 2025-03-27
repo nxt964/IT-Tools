@@ -23,7 +23,7 @@ public class PluginController : Controller
     }
 
     [HttpPost]
-    public async Task<IActionResult> UploadTool(string toolName, IFormFile file)
+    public async Task<IActionResult> UploadTool(IFormFile file)
     {
         if (file == null || file.Length == 0)
         {

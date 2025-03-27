@@ -35,9 +35,12 @@ public class AuthController : Controller
 
         HttpContext.Session.SetInt32("UserId", user.usid);
         HttpContext.Session.SetString("Username", user.username);
+        
+        // If user is admin, redirect to Admin panel
         if (user.is_admin)
         {
             HttpContext.Session.SetInt32("isAdmin", 1);
+            return RedirectToAction("ManageTools", "Admin");
         }
 
         return RedirectToAction("Index", "Home");

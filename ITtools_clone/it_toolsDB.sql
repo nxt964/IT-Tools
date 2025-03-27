@@ -19,14 +19,7 @@ CREATE TABLE tools (
     description VARCHAR(100) NOT NULL,
     enabled BOOLEAN DEFAULT TRUE,
     premium_required BOOLEAN DEFAULT FALSE,
-    pathtool VARCHAR(100) NOT NULL,
-    category_id INT
-);
-
--- Bảng danh mục công cụ (categories)
-CREATE TABLE categories (
-    category_id INT PRIMARY KEY AUTO_INCREMENT,
-    category_name VARCHAR(50) NOT NULL
+    category_name VARCHAR(100) NOT NULL
 );
 
 -- Bảng công cụ yêu thích (favorites)
@@ -37,7 +30,3 @@ CREATE TABLE favorites (
     FOREIGN KEY (usid) REFERENCES users(usid) ON DELETE CASCADE,
     FOREIGN KEY (tid) REFERENCES tools(tid) ON DELETE CASCADE
 );
-
--- Thêm khóa ngoại cho bảng tools
-ALTER TABLE tools
-ADD CONSTRAINT fk_category FOREIGN KEY (category_id) REFERENCES categories(category_id);
