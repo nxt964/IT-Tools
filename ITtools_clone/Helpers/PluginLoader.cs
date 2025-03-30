@@ -70,9 +70,6 @@ public static class PluginLoader
         return null;
     }
 
-
-
-
     private static void OnPluginAdded(object sender, FileSystemEventArgs e)
     {
         Thread.Sleep(1000); // Đợi file được release hẳn
