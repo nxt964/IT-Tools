@@ -149,6 +149,14 @@
                 <a asp-controller="Home" asp-action="Index" class="fs-4 fw-bold">ITtools_clone</a>
             </div>
             <div class="nav-container">
+                @if (Context.Session.GetInt32("UserId") != null && Context.Session.GetInt32("isAdmin") == 1)
+                    {
+                        <div class="nav-item">
+                            <a class="nav-link" asp-controller="Admin" asp-action="ManageTools">
+                                <i class="bi bi-tools me-2"></i> Quản lý công cụ
+                            </a>
+                        </div>
+                    }
                 <ul class="nav flex-column">
                     @await Component.InvokeAsync("PluginsList")
 
