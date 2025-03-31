@@ -9,12 +9,14 @@ namespace ITtools_clone.Services
     {
         List<Tool> GetAllTools();
         List<Tool> GetEnabledTools();
-        Dictionary<string, List<string>> GetCategorizedTools();
+        List<Tool> GetToolsForUser(bool isPremiumUser);
+        Dictionary<string, List<string>> GetCategorizedTools(bool isPremiumUser);
         Tool GetToolById(int id);
         void AddTool(Tool tool);
         void UpdateTool(Tool tool);
         void DeleteTool(int id);
         bool ValidateTool(Tool tool);
+        Tool GetToolByName(string toolName);
     }
 
     public class ToolService : IToolService
@@ -36,11 +38,29 @@ namespace ITtools_clone.Services
             return _toolRepository.GetAllTools().Where(t => t.enabled).ToList();
         }
 
-        public Dictionary<string, List<string>> GetCategorizedTools()
+        // New method to get tools based on user's premium status
+        public List<Tool> GetToolsForUser(bool isPremiumUser)
         {
             var enabledTools = GetEnabledTools();
             
-            return enabledTools
+            if (isPremiumUser)
+            {
+                // Premium users can access all enabled tools
+                return enabledTools;
+            }
+            else
+            {
+                // Non-premium users can only access non-premium tools
+                return enabledTools.Where(t => !t.premium_required).ToList();
+            }
+        }
+
+        // Modified method to consider premium status
+        public Dictionary<string, List<string>> GetCategorizedTools(bool isPremiumUser = false)
+        {
+            var toolsForUser = GetToolsForUser(isPremiumUser);
+            
+            return toolsForUser
                 .Where(t => !string.IsNullOrEmpty(t.category_name))
                 .GroupBy(t => t.category_name!)
                 .ToDictionary(g => g.Key, g => g.Select(t => t.tool_name!).ToList());
@@ -91,6 +111,13 @@ namespace ITtools_clone.Services
                 return false;
 
             return true;
+        }
+
+        public Tool GetToolByName(string toolName)
+        {
+            return _toolRepository.GetAllTools()
+                .FirstOrDefault(t => t.tool_name != null && 
+                                   t.tool_name.Equals(toolName, StringComparison.OrdinalIgnoreCase));
         }
     }
 }

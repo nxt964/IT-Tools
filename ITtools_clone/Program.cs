@@ -1,6 +1,9 @@
 using Microsoft.EntityFrameworkCore;
 using ITtools_clone.Repositories;
 using ITtools_clone.Services;
+using ITtools_clone.Models;
+using ITtools_clone.Middlewares;
+// using ITtools_clone.Middleware; // Removed as the namespace does not exist
 
 namespace ITtools_clone
 {
@@ -61,7 +64,8 @@ namespace ITtools_clone
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
-
+            // Use premium tool access middleware
+            app.UseMiddleware<PremiumToolAccessMiddleware>();
             app.UseSession(); // Kích hoạt session
             app.UseHttpsRedirection();
             app.UseStaticFiles();

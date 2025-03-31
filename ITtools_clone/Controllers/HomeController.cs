@@ -2,6 +2,7 @@ using ITtools_clone.Models;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 using ITtools_clone.Services;
+using Microsoft.AspNetCore.Http;
 
 namespace ITtools_clone.Controllers
 {
@@ -18,7 +19,10 @@ namespace ITtools_clone.Controllers
 
         public IActionResult Index()
         {
-            var categorizedTools = _toolService.GetCategorizedTools();
+            // Check if user is premium
+            bool isPremiumUser = HttpContext.Session.GetInt32("Premium") == 1;
+            
+            var categorizedTools = _toolService.GetCategorizedTools(isPremiumUser);
             return View(categorizedTools);
         }
 
@@ -36,6 +40,25 @@ namespace ITtools_clone.Controllers
         public IActionResult TestTool()
         {
             return View();
+        }
+
+        public IActionResult ToolAccess(string toolName)
+        {
+            var tool = _toolService.GetToolByName(toolName);
+            
+            if (tool == null)
+            {
+                return NotFound();
+            }
+            
+            // Check if tool requires premium and user is not premium
+            if (tool.premium_required && HttpContext.Session.GetInt32("Premium") != 1)
+            {
+                return View("PremiumRequired");
+            }
+            
+            // Continue to the tool
+            return View(tool);
         }
     }
 }
