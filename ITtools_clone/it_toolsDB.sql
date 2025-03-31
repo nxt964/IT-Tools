@@ -9,7 +9,8 @@ CREATE TABLE users (
     password VARCHAR(255) NOT NULL,
     email VARCHAR(100),
     premium BOOLEAN DEFAULT FALSE,
-    is_admin BOOLEAN DEFAULT FALSE
+    is_admin BOOLEAN DEFAULT FALSE,
+    request_premium Boolean default FALSE
 );
 
 -- Bảng công cụ (tools)

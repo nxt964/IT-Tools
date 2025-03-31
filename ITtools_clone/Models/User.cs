@@ -11,5 +11,6 @@ namespace ITtools_clone.Models
         public string? email { get; set; }
         public bool premium { get; set; }
         public bool is_admin { get; set; }
+        public bool request_premium { get; set; }
     }
 }

@@ -35,6 +35,10 @@
                                 else
                                 {
                                     <span class="badge bg-secondary">Free</span>
+                                    @if (user.request_premium)
+                                    {
+                                        <span class="badge bg-info ms-1">Requested Upgrade</span>
+                                    }
                                 }
                             </td>
                             <td>
@@ -51,9 +55,23 @@
                                     {
                                         <button type="submit" class="btn btn-sm btn-outline-warning">
                                             <i class="bi bi-arrow-up"></i> Upgrade to Premium
+                                            @if (user.request_premium)
+                                            {
+                                                <i class="bi bi-exclamation-circle-fill text-info ms-1" title="User has requested premium"></i>
+                                            }
                                         </button>
                                     }
                                 </form>
+                                
+                                @if (!user.premium && user.request_premium)
+                                {
+                                    <form asp-action="DenyPremiumRequest" method="post" style="display:inline; margin-left: 5px;">
+                                        <input type="hidden" name="id" value="@user.usid" />
+                                        <button type="submit" class="btn btn-sm btn-outline-danger">
+                                            <i class="bi bi-x-circle"></i> Deny Request
+                                        </button>
+                                    </form>
+                                }
                             </td>
                         </tr>
                     }

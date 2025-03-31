@@ -15,8 +15,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IntegerBaseConverter", "..\
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RomanConverter", "..\RomanConverter\RomanConverter.csproj", "{90F61BBB-D491-4C61-B69B-5BE5636994FC}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MathEvaluator", "..\MathEvaluator\MathEvaluator.csproj", "{80193EE0-91AB-4951-A8D4-9825960BF0D0}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RandomPortGenerator", "..\RandomPortGenerator\RandomPortGenerator.csproj", "{D5E1F5A3-5908-4C90-80EC-129FC0A0AF89}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ULIDGenerator", "..\ULIDGenerator\ULIDGenerator.csproj", "{2D0D62EC-B358-412A-B5F8-E83C8468B159}"

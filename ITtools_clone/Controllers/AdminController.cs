@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Http;
 using System.Collections.Generic;
 using System;
 using System.IO;
+using System.Linq;
 
 namespace ITtools_clone.Controllers
 {
@@ -152,12 +153,6 @@ namespace ITtools_clone.Controllers
         [HttpPost]
         public IActionResult UpdateUserPremium(int id, bool premium)
         {
-            // Check if user is admin
-            if (HttpContext.Session.GetInt32("isAdmin") != 1)
-            {
-                return RedirectToAction("Login", "Auth");
-            }
-
             var user = _userService.GetUserById(id);
             if (user == null)
             {
@@ -165,8 +160,22 @@ namespace ITtools_clone.Controllers
             }
 
             user.premium = !user.premium;
-            _userService.UpdateUser(user);
             
+            // If upgrading to premium, also clear the request flag
+            if (user.premium)
+            {
+                user.request_premium = false;
+            }
+
+            _userService.UpdateUser(user);
+
+            HttpContext.Session.SetInt32("Premium", user.premium ? 1 : 0);
+            HttpContext.Session.SetInt32("RequestPremium", user.request_premium ? 1 : 0);
+            
+            TempData["Message"] = user.premium 
+                ? $"Đã nâng cấp {user.username} lên Premium" 
+                : $"Đã hạ cấp {user.username} xuống Free";
+                
             return RedirectToAction("ManageUsers");
         }
 
@@ -179,6 +188,43 @@ namespace ITtools_clone.Controllers
             }
 
             _userService.DeleteUser(id);
+            return RedirectToAction("ManageUsers");
+        }
+
+        public IActionResult PremiumRequests()
+        {
+            // Only admin can access
+            if (HttpContext.Session.GetInt32("isAdmin") != 1)
+            {
+                return RedirectToAction("Index", "Home");
+            }
+
+            var users = _userService.GetAllUsers().Where(u => u.request_premium).ToList();
+            return View(users);
+        }
+
+        [HttpPost]
+        public IActionResult DenyPremiumRequest(int id)
+        {
+            // Only admin can access
+            if (HttpContext.Session.GetInt32("isAdmin") != 1)
+            {
+                return RedirectToAction("Index", "Home");
+            }
+
+            var user = _userService.GetUserById(id);
+            if (user == null)
+            {
+                return NotFound();
+            }
+
+            // Reset request_premium to false without upgrading to premium
+            user.request_premium = false;
+            _userService.UpdateUser(user);
+            HttpContext.Session.SetInt32("Premium", user.premium ? 1 : 0);
+            HttpContext.Session.SetInt32("RequestPremium", user.request_premium ? 1 : 0);
+
+            TempData["Message"] = $"Đã từ chối yêu cầu nâng cấp Premium của người dùng {user.username}";
             return RedirectToAction("ManageUsers");
         }
     }

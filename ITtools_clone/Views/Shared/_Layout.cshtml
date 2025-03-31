@@ -153,7 +153,7 @@
                     {
                         <div class="nav-item">
                             <a class="nav-link" asp-controller="Admin" asp-action="ManageTools">
-                                <i class="bi bi-tools me-2"></i> Quản lý công cụ
+                                <i class="me-2"></i> Trang quản lý
                             </a>
                         </div>
                     }
@@ -188,13 +188,29 @@
                     <input type="text" id="search-box" placeholder="Search...">
                     @if (Context.Session.GetInt32("UserId") != null)
                     {
+                        @if (Context.Session.GetInt32("Premium") == 0)
+                        {
+                            @if (Context.Session.GetInt32("RequestPremium") == 1)
+                            {
+                                <span class="badge bg-warning mx-2">Đang chờ nâng cấp</span>
+                            }
+                            else
+                            {
+                                <a asp-controller="User" asp-action="RequestPremium" class="btn btn-warning mx-2">Yêu cầu Premium</a>
+                            }
+                        }
+                        else
+                        {
+                            <span class="badge bg-success mx-2">Premium</span>
+                        }
                         <p class="mx-2">Xin chào, @Context.Session.GetString("Username")</p>
                         <a asp-controller="Auth" asp-action="Logout" class="btn btn-danger">Đăng xuất</a>
                     }
-                    else{
-                    <a asp-controller="Auth" asp-action="Login" class="btn btn-primary mx-2">Đăng nhập</a>
-                    <a asp-controller="Auth" asp-action="Register" class="btn btn-primary">Đăng ký</a>
-                }
+                    else
+                    {
+                        <a asp-controller="Auth" asp-action="Login" class="btn btn-primary mx-2">Đăng nhập</a>
+                        <a asp-controller="Auth" asp-action="Register" class="btn btn-primary">Đăng ký</a>
+                    }
                 </div>
             </header>
             <div id="content">
