@@ -3,7 +3,6 @@ using ITtools_clone.Repositories;
 using ITtools_clone.Services;
 using ITtools_clone.Models;
 using ITtools_clone.Middlewares;
-// using ITtools_clone.Middleware; // Removed as the namespace does not exist
 
 namespace ITtools_clone
 {
@@ -23,8 +22,16 @@ namespace ITtools_clone
                 options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString)));
 
             // Cấu hình Session
-            builder.Services.AddSession();
+            builder.Services.AddSession(options =>
+            {
+                options.IdleTimeout = TimeSpan.FromMinutes(30);
+                options.Cookie.HttpOnly = true;
+                options.Cookie.IsEssential = true;
+            });
             builder.Services.AddHttpContextAccessor();
+
+            // Đăng ký Logging
+            builder.Services.AddLogging();
 
             // Register repositories
             builder.Services.AddScoped<IUserRepository, UserRepository>();
@@ -34,26 +41,29 @@ namespace ITtools_clone
             builder.Services.AddScoped<IUserService, UserService>();
             builder.Services.AddScoped<IToolService, ToolService>();
 
+            builder.Services.AddDistributedMemoryCache(); // Lưu trữ session trong bộ nhớ
+
             var app = builder.Build();
 
-            // Kiểm tra kết nối đến MySQL TRƯỚC KHI CHẠY ỨNG DỤNG
+            // Kiểm tra kết nối MySQL TRƯỚC KHI CHẠY ỨNG DỤNG
             using (var scope = app.Services.CreateScope())
             {
                 var dbContext = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+                var logger = app.Services.GetRequiredService<ILogger<Program>>();
                 try
                 {
                     if (dbContext.Database.CanConnect())
                     {
-                        Console.WriteLine("Kết nối MySQL thành công!");
+                        logger.LogInformation("✅ Kết nối MySQL thành công!");
                     }
                     else
                     {
-                        Console.WriteLine("⚠ Không thể kết nối đến MySQL.");
+                        logger.LogWarning("⚠ Không thể kết nối đến MySQL.");
                     }
                 }
                 catch (Exception ex)
                 {
-                    Console.WriteLine($"Lỗi kết nối MySQL: {ex.Message}");
+                    logger.LogError(ex, "Lỗi kết nối MySQL");
                 }
             }
 
@@ -61,12 +71,12 @@ namespace ITtools_clone
             if (!app.Environment.IsDevelopment())
             {
                 app.UseExceptionHandler("/Home/Error");
-                // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
-            // Use premium tool access middleware
+
+            app.UseSession(); // 🔥 Đặt trước middleware để tránh lỗi Session
             app.UseMiddleware<PremiumToolAccessMiddleware>();
-            app.UseSession(); // Kích hoạt session
+
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseRouting();

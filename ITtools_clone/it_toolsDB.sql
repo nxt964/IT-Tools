@@ -20,7 +20,8 @@ CREATE TABLE tools (
     description VARCHAR(100) NOT NULL,
     enabled BOOLEAN DEFAULT TRUE,
     premium_required BOOLEAN DEFAULT FALSE,
-    category_name VARCHAR(100) NOT NULL
+    category_name VARCHAR(100) NOT NULL,
+    file_name VARCHAR(100) NOT NULL,
 );
 
 -- Bảng công cụ yêu thích (favorites)
