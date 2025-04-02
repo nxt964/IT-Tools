@@ -13,18 +13,9 @@ namespace ITtools_clone
         {
             var builder = WebApplication.CreateBuilder(args);
 
-            // Load .env file
-            Env.Load();
-
-            // Read connection string from environment variables
-            var connectionString = $"Server={Environment.GetEnvironmentVariable("DB_HOST")};" +
-                                   $"Port={Environment.GetEnvironmentVariable("DB_PORT")};" +
-                                   $"Database={Environment.GetEnvironmentVariable("DB_NAME")};" +
-                                   $"User={Environment.GetEnvironmentVariable("DB_USER")};" +
-                                   $"Password={Environment.GetEnvironmentVariable("DB_PASSWORD")};" +
-                                   $"SslMode={Environment.GetEnvironmentVariable("DB_SSL")};";
-
             builder.Services.AddControllersWithViews();
+                        // Lấy chuỗi kết nối từ appsettings.json
+            string connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? string.Empty;
 
             // Đăng ký Entity Framework Core với MySQL
             builder.Services.AddDbContext<AppDbContext>(options =>
