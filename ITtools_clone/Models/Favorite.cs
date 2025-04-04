@@ -2,7 +2,7 @@ namespace ITtools_clone.Models
 {
     public class Favorite
     {
-        public int UserId { get; set; }
-        public int ToolId { get; set; }
+        public int usid { get; set; }
+        public int tid { get; set; }
     }
 }

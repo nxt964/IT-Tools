@@ -1,0 +1,24 @@
+@using ITtools_clone.Models;
+@using ITtools_clone.Helpers;
+
+@model (Tool tool, bool isUserFavourite)
+@{
+    var tool = Model.tool;
+    var isUserFavourite = Model.isUserFavourite;
+}
+
+<div class="col-md-4 col-lg-3 mb-3">
+    <a href="/@Utils.Slugify(tool.tool_name)" class="tool-link">
+        <div class="card shadow-sm h-100 tool-card">
+            <div class="card-body">
+                <div class="d-flex">
+                    <p class="card-title mb-0 flex-grow-1">@tool.tool_name</p>
+                    <div class="text-end">
+                        <i class="bi bi-heart-fill heart-icon @(@isUserFavourite ? "liked" : "")" onclick="toggleHeart(event, this, @tool.tid)"></i>
+                    </div>
+                </div>
+                <p class="card-text text-muted">@tool.description</p>
+            </div>
+        </div>
+    </a>
+</div>

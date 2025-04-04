@@ -10,10 +10,12 @@ public class PluginController : Controller
 {
     private readonly string pluginPath = Path.Combine(Directory.GetCurrentDirectory(), "Plugins");
     private readonly IToolService _toolService;
+    private readonly IHttpContextAccessor _httpContextAccessor;
 
-    public PluginController(IToolService toolService)
+    public PluginController(IToolService toolService, IHttpContextAccessor httpContextAccessor)
     {
         _toolService = toolService;
+        _httpContextAccessor = httpContextAccessor;
     }
 
     [HttpGet]
@@ -87,6 +89,11 @@ public class PluginController : Controller
     [Route("{pluginSlugName}")]
     public IActionResult LoadTool(string pluginSlugName)
     {
+        if (_httpContextAccessor.HttpContext?.Session.GetInt32("UserId") == null)
+        {
+            return RedirectToAction("Login", "Auth");
+        }
+
         var plugin = PluginLoader.GetPlugins().FirstOrDefault(p => Utils.Slugify(p.Name) == pluginSlugName);
         if (plugin == null) return NotFound("Plugin not found");
 

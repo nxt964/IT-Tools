@@ -22,18 +22,18 @@ namespace ITtools_clone
                 .IsUnique();
 
             modelBuilder.Entity<Favorite>()
-                .HasKey(f => new { f.UserId, f.ToolId }); // Thiết lập khóa chính tổng hợp
+                .HasKey(f => new { f.usid, f.tid }); // Thiết lập khóa chính tổng hợp
 
             modelBuilder.Entity<Favorite>()
                 .HasOne<User>()  // Thiết lập quan hệ với User
                 .WithMany()
-                .HasForeignKey(f => f.UserId)
+                .HasForeignKey(f => f.usid)
                 .OnDelete(DeleteBehavior.Cascade);
 
             modelBuilder.Entity<Favorite>()
                 .HasOne<Tool>()  // Thiết lập quan hệ với Tool
                 .WithMany()
-                .HasForeignKey(f => f.ToolId)
+                .HasForeignKey(f => f.tid)
                 .OnDelete(DeleteBehavior.Cascade);
         }
     }

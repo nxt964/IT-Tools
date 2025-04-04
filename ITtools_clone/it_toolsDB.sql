@@ -23,8 +23,8 @@ CREATE TABLE Tools (
     category_name VARCHAR(100) NOT NULL,
     file_name VARCHAR(100) NOT NULL);
 
--- Bảng công cụ yêu thích (favorites)
-CREATE TABLE favorites (
+-- Bảng công cụ yêu thích (Favorites)
+CREATE TABLE Favorites (
     usid INT,
     tid INT,
     PRIMARY KEY (usid, tid),
