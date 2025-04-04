@@ -1,9 +1,46 @@
-﻿@{
+﻿@using ITtools_clone.Models;
+@using ITtools_clone.Helpers;
+@model List<Tool>
+
+@{
     ViewData["Title"] = "Home Page";
     Layout = "_Layout";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+@section Styles {
+    <link rel="stylesheet" href="~/css/home.css" />
+}
+
+<div class="container mt-4">
+    <span class="fw-bold title-tools ms-1">All the tools</span>
+    <div class="row mt-2">
+        @foreach (var tool in Model)
+        {
+            <div class="col-md-4 col-lg-3 mb-3">
+                <a href="/@Utils.Slugify(tool.tool_name)" class="tool-link">
+                    <div class="card shadow-sm h-100 tool-card">
+                        <div class="card-body">
+                            <div class="d-flex">
+                                <p class="card-title mb-0 flex-grow-1">@tool.tool_name</p>
+                                <div class="text-end">
+                                    <i class="bi bi-heart-fill heart-icon" onclick="toggleHeart(event, this)"></i>
+                                </div>   
+                            </div>
+                            <p class="card-text text-muted">@tool.description</p>
+                        </div>
+                    </div>
+                </a>
+            </div>
+        }
+    </div>
 </div>
+
+@section Scripts {
+    <script>
+        function toggleHeart(event, icon) {
+            event.stopPropagation();
+            event.preventDefault();
+            icon.classList.toggle("liked");
+        }
+    </script>
+}

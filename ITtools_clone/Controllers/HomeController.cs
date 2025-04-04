@@ -19,11 +19,17 @@ namespace ITtools_clone.Controllers
 
         public IActionResult Index()
         {
-            // Check if user is premium
-            bool isPremiumUser = HttpContext.Session.GetInt32("Premium") == 1;
-            
-            var categorizedTools = _toolService.GetCategorizedTools(isPremiumUser);
-            return View(categorizedTools);
+            // Check if user is admin
+            bool isAdmin = HttpContext.Session.GetInt32("isAdmin") == 1;
+
+            if (isAdmin) {
+                return View(_toolService.GetAllTools());
+            }
+            else {
+                // Check if user is premium
+                bool isPremiumUser = HttpContext.Session.GetInt32("Premium") == 1;
+                return View(_toolService.GetToolsForUser(isPremiumUser));
+            }
         }
 
         public IActionResult Privacy()

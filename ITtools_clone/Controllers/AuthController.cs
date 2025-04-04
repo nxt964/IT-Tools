@@ -23,19 +23,20 @@ public class AuthController : Controller
         var user = _userService.GetUserByEmail(email);
         if (user == null)
         {
-            ViewBag.Error = "Email không tồn tại!";
+            ViewBag.Error = "Email does not exist!";
             return View();
         }
 
         if (!_userService.ValidateUserLogin(email, Password))
         {
-            ViewBag.Error = "Mật khẩu không chính xác!";
+            ViewBag.Error = "Password is incorrect!";
             return View();
         }
 
         HttpContext.Session.SetInt32("UserId", user.usid);
         HttpContext.Session.SetString("Username", user.username);
         HttpContext.Session.SetInt32("Premium", user.premium ? 1 : 0);
+        HttpContext.Session.SetInt32("isAdmin", user.is_admin ? 1 : 0);
         HttpContext.Session.SetInt32("RequestPremium", user.request_premium ? 1 : 0);
         
         // If user is admin, redirect to Admin panel

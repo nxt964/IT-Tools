@@ -17,13 +17,17 @@ namespace ITtools_clone.ViewComponents
 
         public IViewComponentResult Invoke()
         {
-            // Check if user is premium
-            bool isPremiumUser = _httpContextAccessor.HttpContext?.Session.GetInt32("Premium") == 1;
-            
-            // Get tools based on user's premium status
-            var categorizedTools = _toolService.GetCategorizedTools(isPremiumUser);
-            
-            return View(categorizedTools);
+            // Check if user is admin
+            bool isAdmin = _httpContextAccessor.HttpContext?.Session.GetInt32("isAdmin") == 1;
+
+            if (isAdmin) {
+                return View(_toolService.GetCategorizedTools(true, false));
+            }
+            else {
+                // Check if user is premium
+                bool isPremiumUser = _httpContextAccessor.HttpContext?.Session.GetInt32("Premium") == 1;
+                return View(_toolService.GetCategorizedTools(false, isPremiumUser));
+            }
         }
     }
 }

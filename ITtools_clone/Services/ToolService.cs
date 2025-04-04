@@ -10,7 +10,7 @@ namespace ITtools_clone.Services
         List<Tool> GetAllTools();
         List<Tool> GetEnabledTools();
         List<Tool> GetToolsForUser(bool isPremiumUser);
-        Dictionary<string, List<string>> GetCategorizedTools(bool isPremiumUser);
+        Dictionary<string, List<string>> GetCategorizedTools(bool isAdmin, bool isPremiumUser);
         Tool GetToolById(int id);
         void AddTool(Tool tool);
         void UpdateTool(Tool tool);
@@ -56,11 +56,11 @@ namespace ITtools_clone.Services
         }
 
         // Modified method to consider premium status
-        public Dictionary<string, List<string>> GetCategorizedTools(bool isPremiumUser = false)
+        public Dictionary<string, List<string>> GetCategorizedTools(bool isAdmin = false, bool isPremiumUser = false)
         {
-            var toolsForUser = GetToolsForUser(isPremiumUser);
+            var tools = isAdmin ? GetAllTools() : GetToolsForUser(isPremiumUser);
             
-            return toolsForUser
+            return tools
                 .Where(t => !string.IsNullOrEmpty(t.category_name))
                 .GroupBy(t => t.category_name!)
                 .ToDictionary(g => g.Key, g => g.Select(t => t.tool_name!).ToList());
