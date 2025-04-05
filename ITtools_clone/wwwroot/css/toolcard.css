@@ -11,6 +11,15 @@
     transition: transform 0.2s ease-in-out, border-color 0.2s ease-in-out;
 }
 
+.tool-card.premium {
+    border: 1px solid #FFC107;
+    box-shadow: 0 0 10px rgba(255, 193, 7, 0.5);
+}
+.tool-card.premium .card-title {
+    font-weight: 700;
+    color: #FFC107;
+}
+
 .tool-card:hover {
     cursor: pointer;
     border-color: #14a058;
@@ -25,6 +34,12 @@
     font-size: 18px;
     font-weight: 500;
     transition: color 0.2s ease-in-out;
+}
+
+.card-title.premium {
+    font-weight: 700;
+    color: #FFC107;
+    font-size: 20px;
 }
 
 .card-text {

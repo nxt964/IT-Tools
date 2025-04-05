@@ -55,7 +55,7 @@
                 </div>
                 <div class="flex-grow-1">
                     <form class="d-flex mx-4" method="get" action="@Url.Action("Search", "Home")">
-                        <input type="text" name="query" id="search-box" placeholder="Search..." class="form-control w-100" />
+                        <input type="text" name="query" id="search-box" placeholder="Search tool..." class="form-control w-100" />
                         <button type="submit" class="btn btn-primary ms-2">
                             <i class="bi bi-search"></i>
                         </button>
@@ -109,45 +109,7 @@
 
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-    <script>
-        document.addEventListener("DOMContentLoaded", function () {
-            let sidebar = document.getElementById("sidebar");
-            let toggleButton = document.getElementById("toggleSidebar");
-
-            // Layout
-            function updateLayout() {
-				if (window.innerWidth > 800) {
-					sidebar.classList.remove("hidden");
-				} else {
-                    sidebar.classList.add("hidden");
-				}
-			}
-
-            toggleButton.addEventListener("click", function () {
-                sidebar.classList.toggle("hidden");
-            });
-
-            window.addEventListener("resize", updateLayout);
-
-            updateLayout();
-
-
-            // Toggle icon
-            let toggles = document.querySelectorAll('[data-bs-toggle="collapse"]');
-
-            toggles.forEach(toggle => {
-                let icon = toggle.querySelector("#toggle-icon");
-
-                toggle.addEventListener("click", function () {
-                    let isOpen = toggle.getAttribute("aria-expanded") === "true";
-                    
-                    icon.classList.toggle("bi-chevron-right", !isOpen);
-                    icon.classList.toggle("bi-chevron-down", isOpen);
-                });
-            });
-        });
-
-    </script>
+    <script src="~/js/defaultlayout.js"></script>
     @RenderSection("Scripts", required: false)
 </body>
 </html>

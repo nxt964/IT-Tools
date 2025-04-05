@@ -26,7 +26,7 @@ namespace ITtools_clone.Controllers
 
             var allTools = isAdmin 
                 ? _toolService.GetAllTools() 
-                : _toolService.GetToolsForUser(isPremiumUser);
+                : _toolService.GetEnabledTools();
 
             var favouriteTools = (userId != null) 
                 ? _favouriteService.GetFavouriteToolsByUserId(userId.Value) 
@@ -57,6 +57,11 @@ namespace ITtools_clone.Controllers
             return View();
         }
 
+        public IActionResult PremiumRequired()
+        {
+            return View();
+        }
+
         public IActionResult ToolAccess(string toolName)
         {
             var tool = _toolService.GetToolByName(toolName);
@@ -74,6 +79,33 @@ namespace ITtools_clone.Controllers
             
             // Continue to the tool
             return View(tool);
+        }
+
+        [HttpGet]
+        public IActionResult Search(string query)
+        {
+            if (!string.IsNullOrEmpty(query))
+            {
+                bool isAdmin = HttpContext.Session.GetInt32("isAdmin") == 1;
+                bool isPremiumUser = HttpContext.Session.GetInt32("Premium") == 1;
+                int? userId = HttpContext.Session.GetInt32("UserId");
+
+                var allTools = isAdmin 
+                    ? _toolService.GetAllTools() 
+                    : _toolService.GetEnabledTools();
+
+                var filteredTools = allTools
+                    .Where(t => t.tool_name.Contains(query, StringComparison.OrdinalIgnoreCase) || 
+                                t.description.Contains(query, StringComparison.OrdinalIgnoreCase))
+                    .ToList();
+
+                var favouriteToolsId = (userId != null) 
+                    ? _favouriteService.GetFavouriteToolsByUserId(userId.Value).Select(t => t.tid).ToList() 
+                    : new List<int>();
+
+                return View("Search", (filteredTools, favouriteToolsId, query));
+            }
+            return RedirectToAction("Index");
         }
     }
 }

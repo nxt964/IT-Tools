@@ -13,11 +13,13 @@ namespace ITtools_clone.Controllers
     {
         private readonly IToolService _toolService;
         private readonly IUserService _userService;
+        private readonly IFavouriteService _favouriteService;
 
-        public AdminController(IToolService toolService, IUserService userService)
+        public AdminController(IToolService toolService, IUserService userService, IFavouriteService favouriteService)
         {
             _toolService = toolService;
             _userService = userService;
+            _favouriteService = favouriteService;
         }
 
         // Admin Dashboard
@@ -125,6 +127,8 @@ namespace ITtools_clone.Controllers
                 }
 
                 _toolService.DeleteTool(id);
+                // Remove associated favourites
+                _favouriteService.RemoveFromFavouritesByToolId(id);
 
                 TempData["SuccessMessage"] = "Tool and associated files deleted successfully.";
             }
@@ -188,6 +192,7 @@ namespace ITtools_clone.Controllers
             }
 
             _userService.DeleteUser(id);
+            _favouriteService.RemoveFromFavouritesByUserId(id);
             return RedirectToAction("ManageUsers");
         }
 

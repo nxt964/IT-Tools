@@ -7,6 +7,9 @@ namespace ITtools_clone.Repositories
         List<Tool> GetFavouriteToolsByUserId(int userId);
         void AddToFavourites(int userId, int toolId);
         void RemoveFromFavourites(int userId, int toolId);
+        void RemoveFromFavouritesByUserId(int userId);
+        void RemoveFromFavouritesByToolId(int toolId);
+
         bool IsFavourite(int userId, int toolId);
     }
     public class FavouriteRepository : IFavouriteRepository
@@ -25,7 +28,7 @@ namespace ITtools_clone.Repositories
                                         .ToList();
 
             var tools = _context.Tools
-                                .Where(t => favoriteToolIds.Contains(t.tid))
+                                .Where(t => favoriteToolIds.Contains(t.tid) && t.enabled == true)
                                 .ToList();
 
             return tools;
@@ -51,6 +54,24 @@ namespace ITtools_clone.Repositories
                 _context.Favorites.Remove(favorite);
                 _context.SaveChanges();
             }
+        }
+
+        public void RemoveFromFavouritesByUserId(int userId)
+        {
+            var favorites = _context.Favorites
+                                    .Where(f => f.usid == userId)
+                                    .ToList();
+            _context.Favorites.RemoveRange(favorites);
+            _context.SaveChanges();
+        }
+
+        public void RemoveFromFavouritesByToolId(int toolId)
+        {
+            var favorites = _context.Favorites
+                                    .Where(f => f.tid == toolId)
+                                    .ToList();
+            _context.Favorites.RemoveRange(favorites);
+            _context.SaveChanges();
         }
 
         public bool IsFavourite(int userId, int toolId)

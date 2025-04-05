@@ -46,8 +46,9 @@ namespace ITtools_clone.Middlewares
 
                 if (matchingTool != null && matchingTool.premium_required)
                 {
+                    bool isLoggedIn = context.Session.GetInt32("UserId") != null;
                     bool isPremiumUser = context.Session.GetInt32("Premium") == 1;
-                    if (!isPremiumUser)
+                    if (!isLoggedIn || !isPremiumUser)
                     {
                         context.Response.Redirect("/Home/PremiumRequired");
                         return;

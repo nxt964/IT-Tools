@@ -8,6 +8,8 @@ namespace ITtools_clone.Services
         List<Tool> GetFavouriteToolsByUserId(int userId);
         void AddToFavourites(int userId, int toolId);
         void RemoveFromFavourites(int userId, int toolId);
+        void RemoveFromFavouritesByUserId(int userId);
+        void RemoveFromFavouritesByToolId(int toolId);
         bool IsFavourite(int userId, int toolId);
     }
     public class FavouriteService : IFavouriteService
@@ -31,6 +33,14 @@ namespace ITtools_clone.Services
         public void RemoveFromFavourites(int userId, int toolId)
         {
             _favouriteRepository.RemoveFromFavourites(userId, toolId);
+        }
+        public void RemoveFromFavouritesByUserId(int userId)
+        {
+            _favouriteRepository.RemoveFromFavouritesByUserId(userId);
+        }
+        public void RemoveFromFavouritesByToolId(int toolId)
+        {
+            _favouriteRepository.RemoveFromFavouritesByToolId(toolId);
         }
         public bool IsFavourite(int userId, int toolId)
         {

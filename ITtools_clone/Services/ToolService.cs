@@ -58,7 +58,7 @@ namespace ITtools_clone.Services
         // Modified method to consider premium status
         public Dictionary<string, List<string>> GetCategorizedTools(bool isAdmin = false, bool isPremiumUser = false)
         {
-            var tools = isAdmin ? GetAllTools() : GetToolsForUser(isPremiumUser);
+            var tools = isAdmin ? GetAllTools() : GetEnabledTools();
             
             return tools
                 .Where(t => !string.IsNullOrEmpty(t.category_name))

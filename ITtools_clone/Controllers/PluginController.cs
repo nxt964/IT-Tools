@@ -29,7 +29,13 @@ public class PluginController : Controller
     {
         if (file == null || file.Length == 0)
         {
-            ViewBag.Error = "Vui lòng chọn file DLL.";
+            ViewBag.Error = "Please select a DLL file to upload.";
+            return View("AddTool");
+        }
+
+        if (!file.FileName.EndsWith(".dll", StringComparison.OrdinalIgnoreCase))
+        {
+            ViewBag.Error = "Only .dll files are allowed.";
             return View("AddTool");
         }
 
@@ -39,61 +45,65 @@ public class PluginController : Controller
         }
 
         string filePath = Path.Combine(pluginPath, file.FileName);
+        byte[] fileBytes;
 
-        using (var stream = new FileStream(filePath, FileMode.Create))
+        try
         {
-            await file.CopyToAsync(stream);
-        }
+            // Đọc file vào RAM trước
+            using (var memoryStream = new MemoryStream())
+            {
+                await file.CopyToAsync(memoryStream);
+                fileBytes = memoryStream.ToArray();
+            }
 
-        // Load the plugin to get its Name and Description
-        var plugin = PluginLoader.LoadPlugin(filePath);
-        if (plugin == null)
-        {
-            ViewBag.Error = "Không thể tải plugin.";
-            return View("AddTool");
-        }
+            // Load plugin từ stream để kiểm tra hợp lệ
+            var plugin = PluginLoader.LoadPlugin(fileBytes, filePath); // cần overload LoadPlugin thêm
+            if (plugin == null)
+            {
+                ViewBag.Error = "Failed to load plugin. Please check file content.";
+                return View("AddTool");
+            }
 
-        var tool = new Tool
-        {
-            tool_name = plugin.Name,
-            description = plugin.Description,
-            enabled = true,
-            premium_required = false,
-            category_name = plugin.Category,
-            file_name = file.FileName 
-        };
+            // Ghi file thực sự sau khi load thành công
+            await System.IO.File.WriteAllBytesAsync(filePath, fileBytes);
 
-        try 
-        {
+            var tool = new Tool
+            {
+                tool_name = plugin.Name,
+                description = plugin.Description,
+                enabled = true,
+                premium_required = false,
+                category_name = plugin.Category,
+                file_name = file.FileName
+            };
+
             _toolService.AddTool(tool);
-            ViewBag.Message = "Tool đã được tải lên thành công!";
+            ViewBag.Error = null;
+            ViewBag.Success = "Tool uploaded successfully!";
         }
         catch (Exception ex)
         {
-            ViewBag.Error = ex.Message;
-            
-            // Clean up file if database save failed
+            ViewBag.Error = "Upload failed: " + ex.Message;
+
+            // Cleanup nếu file đã ghi (an toàn trong mọi trường hợp)
             try
             {
-                System.IO.File.Delete(filePath);
+                if (System.IO.File.Exists(filePath))
+                    System.IO.File.Delete(filePath);
             }
             catch
             {
-                // Ignore deletion errors
+                // Ignore cleanup errors
             }
         }
-        
+
         return View("AddTool");
     }
+
 
     [Route("{pluginSlugName}")]
     public IActionResult LoadTool(string pluginSlugName)
     {
-        if (_httpContextAccessor.HttpContext?.Session.GetInt32("UserId") == null)
-        {
-            return RedirectToAction("Login", "Auth");
-        }
-
         var plugin = PluginLoader.GetPlugins().FirstOrDefault(p => Utils.Slugify(p.Name) == pluginSlugName);
         if (plugin == null) return NotFound("Plugin not found");
 

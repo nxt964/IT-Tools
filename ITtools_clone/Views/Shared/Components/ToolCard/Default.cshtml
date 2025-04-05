@@ -7,12 +7,12 @@
     var isUserFavourite = Model.isUserFavourite;
 }
 
-<div class="col-md-4 col-lg-3 mb-3 tool-card-wrapper" 
+<div class="col-md-4 col-lg-3 mb-3 tool-card-wrapper"
      data-tool-id="@tool.tid""
      data-tool-slugname="@Utils.Slugify(tool.tool_name)"
      data-tool-name="@tool.tool_name">
     <a href="/@Utils.Slugify(tool.tool_name)" class="tool-link">
-        <div class="card shadow-sm h-100 tool-card">
+        <div class="card shadow-sm h-100 tool-card @(@tool.premium_required ? "premium" : "")">
             <div class="card-body">
                 <div class="d-flex">
                     <p class="card-title mb-0 flex-grow-1">@tool.tool_name</p>

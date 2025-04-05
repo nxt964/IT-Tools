@@ -6,9 +6,9 @@
     <div class="card shadow-sm">
         <div class="card-body p-5">
             <i class="bi bi-lock-fill text-warning display-1"></i>
-            <h1 class="mt-4">Tính năng Premium</h1>
+            <h1 class="mt-4">Premium Tool</h1>
             <p class="lead">
-                Công cụ này chỉ dành cho người dùng Premium.
+                This tool is only available for Premium users.
             </p>
             <hr />
             
@@ -17,19 +17,19 @@
                 @if (Context.Session.GetInt32("RequestPremium") == 1)
                 {
                     <div class="alert alert-warning">
-                        Bạn đã gửi yêu cầu nâng cấp Premium. Vui lòng chờ quản trị viên xác nhận.
+                        You have already requested to upgrade to Premium. Please wait for admin approval.
                     </div>
                 }
                 else
                 {
                     <a asp-controller="User" asp-action="RequestPremium" class="btn btn-warning btn-lg">
-                        <i class="bi bi-star-fill me-2"></i> Nâng cấp lên Premium ngay
+                        <i class="bi bi-star-fill me-2"></i> Upgrade to Premium now!
                     </a>
                 }
             }
             else
             {
-                <p>Vui lòng <a asp-controller="Auth" asp-action="Login">đăng nhập</a> để yêu cầu nâng cấp Premium.</p>
+                <p>Please <a asp-controller="Auth" asp-action="Login">Log in</a> with a Premium account to use this tool!</p>
             }
         </div>
     </div>
