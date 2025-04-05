@@ -8,12 +8,12 @@ namespace ITtools_clone.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly ILogger<HomeController> _logger;
+        private readonly IFavouriteService _favouriteService;
         private readonly IToolService _toolService;
 
-        public HomeController(ILogger<HomeController> logger, IToolService toolService)
+        public HomeController(IFavouriteService favouriteService, IToolService toolService)
         {
-            _logger = logger;
+            _favouriteService = favouriteService;
             _toolService = toolService;
         }
 
@@ -21,15 +21,24 @@ namespace ITtools_clone.Controllers
         {
             // Check if user is admin
             bool isAdmin = HttpContext.Session.GetInt32("isAdmin") == 1;
+            bool isPremiumUser = HttpContext.Session.GetInt32("Premium") == 1;
+            int? userId = HttpContext.Session.GetInt32("UserId");
 
-            if (isAdmin) {
-                return View(_toolService.GetAllTools());
-            }
-            else {
-                // Check if user is premium
-                bool isPremiumUser = HttpContext.Session.GetInt32("Premium") == 1;
-                return View(_toolService.GetToolsForUser(isPremiumUser));
-            }
+            var allTools = isAdmin 
+                ? _toolService.GetAllTools() 
+                : _toolService.GetToolsForUser(isPremiumUser);
+
+            var favouriteTools = (userId != null) 
+                ? _favouriteService.GetFavouriteToolsByUserId(userId.Value) 
+                : new List<Tool>();
+
+            var model = new HomeViewModel
+            {
+                AllTools = allTools,
+                FavouriteTools = favouriteTools
+            };
+
+            return View(model);
         }
 
         public IActionResult Privacy()

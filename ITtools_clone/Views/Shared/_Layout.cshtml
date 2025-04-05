@@ -23,6 +23,7 @@
             </div>
             <div class="nav-container">
                 <ul class="nav flex-column">
+                    @await Component.InvokeAsync("FavoriteMenu")
                     @await Component.InvokeAsync("PluginsList")
                 </ul>
             </div>

@@ -15,11 +15,8 @@ namespace ITtools_clone.ViewComponents
             _httpContextAccessor = httpContextAccessor;
         }
 
-        public IViewComponentResult Invoke(Tool tool)
+        public IViewComponentResult Invoke(Tool tool, bool isUserFavourite)
         {
-            var userId = _httpContextAccessor.HttpContext?.Session.GetInt32("UserId") ?? -1;
-            var isUserFavourite = _favouriteService.IsFavourite(userId, tool.tid);
-
             return View((tool, isUserFavourite));
         }
         

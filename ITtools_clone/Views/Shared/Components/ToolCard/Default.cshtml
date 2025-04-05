@@ -7,14 +7,22 @@
     var isUserFavourite = Model.isUserFavourite;
 }
 
-<div class="col-md-4 col-lg-3 mb-3">
+<div class="col-md-4 col-lg-3 mb-3 tool-card-wrapper" 
+     data-tool-id="@tool.tid""
+     data-tool-slugname="@Utils.Slugify(tool.tool_name)"
+     data-tool-name="@tool.tool_name">
     <a href="/@Utils.Slugify(tool.tool_name)" class="tool-link">
         <div class="card shadow-sm h-100 tool-card">
             <div class="card-body">
                 <div class="d-flex">
                     <p class="card-title mb-0 flex-grow-1">@tool.tool_name</p>
-                    <div class="text-end">
-                        <i class="bi bi-heart-fill heart-icon @(@isUserFavourite ? "liked" : "")" onclick="toggleHeart(event, this, @tool.tid)"></i>
+                    <div class="heart-container">
+                        <i class="bi bi-heart-fill heart-icon @(@isUserFavourite ? "liked" : "")" 
+                           data-tool-id="@tool.tid"
+                           data-bs-toggle="tooltip" data-bs-placement="top" 
+                           title="@(isUserFavourite ? "Remove from favorites" : "Add to favorites")"
+                           onclick="toggleHeart(event, this, @tool.tid)">
+                        </i>
                     </div>
                 </div>
                 <p class="card-text text-muted">@tool.description</p>
