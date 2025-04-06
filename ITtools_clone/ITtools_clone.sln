@@ -31,19 +31,27 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "QRCodeGenerator", "..\QRCod
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WifiQRCodeGenerator", "..\WifiQRCodeGenerator\WifiQRCodeGenerator.csproj", "{75CEEA48-DC28-4E24-94E1-8CB9CE6E5B08}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IPv4SubnetCalculator", "..\IPv4SubnetCalculator\IPv4SubnetCalculator.csproj", "{6EA6D54C-C295-492F-B70E-7036F1764647}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IPv4SubnetCalculator", "..\IPv4SubnetCalculator\IPv4SubnetCalculator.csproj", "{6EA6D54C-C295-492F-B70E-7036F1764647}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IPv4AddressConverter", "..\IPv4AddressConverter\IPv4AddressConverter.csproj", "{55CB080E-61C9-41C7-82ED-76EEC2C97BEA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IPv4AddressConverter", "..\IPv4AddressConverter\IPv4AddressConverter.csproj", "{55CB080E-61C9-41C7-82ED-76EEC2C97BEA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IPv4RangeExpander", "..\IPv4RangeExpander\IPv4RangeExpander.csproj", "{750E0346-C574-4BCE-A73B-A6E1859DB38B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IPv4RangeExpander", "..\IPv4RangeExpander\IPv4RangeExpander.csproj", "{750E0346-C574-4BCE-A73B-A6E1859DB38B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GitCheatSheet", "..\GitCheatSheet\GitCheatSheet.csproj", "{5744CAF6-6323-4E80-8A58-B3029D1CE7F8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GitCheatSheet", "..\GitCheatSheet\GitCheatSheet.csproj", "{5744CAF6-6323-4E80-8A58-B3029D1CE7F8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JSONPrettify", "..\JSONPrettify\JSONPrettify.csproj", "{EFBFB389-FDB1-4F61-9B6E-C1494823B9FA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JSONPrettify", "..\JSONPrettify\JSONPrettify.csproj", "{EFBFB389-FDB1-4F61-9B6E-C1494823B9FA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JSONMinify", "..\JSONMinify\JSONMinify.csproj", "{59B2B856-77FF-47C8-8E88-12B8F818F4CF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JSONMinify", "..\JSONMinify\JSONMinify.csproj", "{59B2B856-77FF-47C8-8E88-12B8F818F4CF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XMLFormatter", "..\XMLFormatter\XMLFormatter.csproj", "{1C96C252-B7E8-4A2C-84D8-179FA9EA1D34}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "XMLFormatter", "..\XMLFormatter\XMLFormatter.csproj", "{1C96C252-B7E8-4A2C-84D8-179FA9EA1D34}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SVGPlaceholderGenerator", "..\SVGPlaceholderGenerator\SVGPlaceholderGenerator.csproj", "{22E86323-3408-4282-9996-0FB4E1800593}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MathEvaluator", "..\MathEvaluator\MathEvaluator.csproj", "{CD97CA3F-00F0-400E-940F-E4648AB3CE99}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PercentageCalculator", "..\PercentageCalculator\PercentageCalculator.csproj", "{3C466795-1112-4BD9-99E1-8487282CC965}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ETACalculator", "..\ETACalculator\ETACalculator.csproj", "{AFD6B0D3-52A8-4973-A1B1-99068C33EEEB}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -135,6 +143,22 @@ Global
 		{1C96C252-B7E8-4A2C-84D8-179FA9EA1D34}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1C96C252-B7E8-4A2C-84D8-179FA9EA1D34}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1C96C252-B7E8-4A2C-84D8-179FA9EA1D34}.Release|Any CPU.Build.0 = Release|Any CPU
+		{22E86323-3408-4282-9996-0FB4E1800593}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{22E86323-3408-4282-9996-0FB4E1800593}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{22E86323-3408-4282-9996-0FB4E1800593}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{22E86323-3408-4282-9996-0FB4E1800593}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CD97CA3F-00F0-400E-940F-E4648AB3CE99}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CD97CA3F-00F0-400E-940F-E4648AB3CE99}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CD97CA3F-00F0-400E-940F-E4648AB3CE99}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CD97CA3F-00F0-400E-940F-E4648AB3CE99}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3C466795-1112-4BD9-99E1-8487282CC965}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3C466795-1112-4BD9-99E1-8487282CC965}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3C466795-1112-4BD9-99E1-8487282CC965}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3C466795-1112-4BD9-99E1-8487282CC965}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AFD6B0D3-52A8-4973-A1B1-99068C33EEEB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AFD6B0D3-52A8-4973-A1B1-99068C33EEEB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AFD6B0D3-52A8-4973-A1B1-99068C33EEEB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AFD6B0D3-52A8-4973-A1B1-99068C33EEEB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
