@@ -107,5 +107,10 @@ namespace ITtools_clone.Controllers
             }
             return RedirectToAction("Index");
         }
+
+        public IActionResult TestNewTool()
+        {
+            return View("TestTool");
+        }
     }
 }

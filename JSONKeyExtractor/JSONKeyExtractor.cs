@@ -1,4 +1,17 @@
-﻿<div class='container py-5 mx-auto' style='max-width: 700px;'>
+﻿using ToolInterface;
+
+namespace JSONKeyExtractor;
+
+public class JSONKeyExtractor : ITool
+{
+    public string Name => "JSON Key Extractor";
+    public string Category => "Data";
+    public string Description => "Extract all unique keys from your JSON input.";
+
+    public object Execute(object? input) => null;
+
+    public string GetUI() => @"
+<div class='container py-5 mx-auto' style='max-width: 700px;'>
     <!-- Header -->
     <div class='header mb-4'>
         <h1 class='text-start m-0'>JSON Key Extractor</h1>
@@ -71,3 +84,7 @@
         document.execCommand('copy');
     }
 </script>
+
+";
+    public void Stop() { }
+}

@@ -25,6 +25,9 @@
                 <ul class="nav flex-column">
                     @await Component.InvokeAsync("FavoriteMenu")
                     @await Component.InvokeAsync("PluginsList")
+                    <li>
+                        <a class="nav-link" asp-controller="Home" asp-action="TestNewTool">Test new tool</a>
+                    </li>
                 </ul>
             </div>
         </nav>

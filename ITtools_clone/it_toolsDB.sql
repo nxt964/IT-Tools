@@ -17,7 +17,7 @@ CREATE TABLE Users (
 CREATE TABLE Tools (
     tid INT PRIMARY KEY AUTO_INCREMENT,
     tool_name VARCHAR(100) NOT NULL,
-    description VARCHAR(100) NOT NULL,
+    description VARCHAR(255) NOT NULL,
     enabled BOOLEAN DEFAULT TRUE,
     premium_required BOOLEAN DEFAULT FALSE,
     category_name VARCHAR(100) NOT NULL,
