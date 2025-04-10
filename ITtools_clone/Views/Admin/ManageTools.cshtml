@@ -2,6 +2,7 @@
 @{
     ViewData["Title"] = "Manage Tools";
     Layout = "_AdminLayout";
+    int rowNumber = 1; 
 }
 
 <div class="card">
@@ -16,7 +17,7 @@
             <table class="table table-striped table-hover">
                 <thead>
                     <tr>
-                        <th>ID</th>
+                        <th>#</th>
                         <th>Name</th>
                         <th>Category</th>
                         <th>Status</th>
@@ -28,7 +29,7 @@
                     @foreach (var tool in Model)
                     {
                         <tr>
-                            <td>@tool.tid</td>
+                            <td>@(rowNumber++)</td>
                             <td>@tool.tool_name</td>
                             <td>@tool.category_name</td>
                             <td>
@@ -50,6 +51,7 @@
                                         </button>
                                     }
                                 </form>
+                            </td>
                             <td>
                                 <form asp-action="UpdateToolPremium" method="post" style="display:inline;">
                                     <input type="hidden" name="id" value="@tool.tid" />

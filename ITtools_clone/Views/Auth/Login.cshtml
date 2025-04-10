@@ -1,6 +1,6 @@
 @{
     Layout = "~/Views/Shared/_LayoutAuth.cshtml";
-    ViewData["Title"] = "Đăng nhập";
+    ViewData["Title"] = "Login";
 }
 
 <form class="auth-container" method="post" asp-action="Login">
@@ -9,9 +9,10 @@
         <input type="email" id="email" name="Email" required />
     </div>
     <div>
-        <label for="password">Mật khẩu:</label>
+        <label for="password">Password:</label>
         <input type="password" id="password" name="Password" required />
     </div>
-    <button type="submit">Đăng nhập</button>
-    <p>Chưa có tài khoản? <a asp-controller="Auth" asp-action="Register">Đăng ký</a></p>
+    <button type="submit">Login</button>
+    <p>Don't have an account? <a asp-controller="Auth" asp-action="Register">Register</a></p>
+    <p>Back home? <a asp-controller="Home" asp-action="Index">Home</a></p>
 </form>
