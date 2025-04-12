@@ -1,18 +1,35 @@
 @{
     Layout = "~/Views/Shared/_LayoutAuth.cshtml";
     ViewData["Title"] = "Login";
+    var error = (ValueTuple<string, string>?)ViewBag.Error;
 }
 
-<form class="auth-container" method="post" asp-action="Login">
-    <div>
+<form  method="post" asp-action="Login">
+    <div class="mb-3">
         <label for="email">Email:</label>
-        <input type="email" id="email" name="Email" required />
+        <input class="mb-0" type="email" id="email" name="Email" required />
+        @if (error?.Item1 == "Email")
+        {
+            <div style="color:red">@error?.Item2</div>
+        }
     </div>
-    <div>
+    <div class="mb-3">
         <label for="password">Password:</label>
-        <input type="password" id="password" name="Password" required />
+        <input class="mb-0" type="password" id="password" name="Password" required />
+        @if (error?.Item1 == "Password")
+        {
+            <div style="color:red">@error?.Item2</div>
+        }
     </div>
-    <button type="submit">Login</button>
-    <p>Don't have an account? <a asp-controller="Auth" asp-action="Register">Register</a></p>
-    <p>Back home? <a asp-controller="Home" asp-action="Index">Home</a></p>
+    <button class="mt-2" type="submit">Login</button>
+    <div>
+        <p>Don't have any account? <a class="fw-bold" asp-controller="Auth" asp-action="Register">Register now!</a></p>
+        <p class="mb-0">
+            <a asp-controller="Home" asp-action="Index" class="fw-bold fs-5">
+                Back to home
+                <i class="bi bi-house-door-fill"></i>
+            </a>
+
+        </p>
+    </div>
 </form>

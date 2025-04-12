@@ -23,13 +23,13 @@ public class AuthController : Controller
         var user = _userService.GetUserByEmail(email);
         if (user == null)
         {
-            ViewBag.Error = "Email does not exist!";
+            ViewBag.Error = ("Email", "Email does not exist!");
             return View();
         }
 
         if (!_userService.ValidateUserLogin(email, Password))
         {
-            ViewBag.Error = "Password is incorrect!";
+            ViewBag.Error = ("Password", "Password is incorrect!");
             return View();
         }
 
@@ -59,19 +59,19 @@ public class AuthController : Controller
     {
         if (Password != ConfirmPassword)
         {
-            ViewBag.Error = "Mật khẩu nhập lại không khớp!";
+            ViewBag.Error = ("ConfirmPassword", "Password does not match!");
             return View();
         }
 
         if (_userService.GetUserByEmail(Email) != null)
         {
-            ViewBag.Error = "Email đã tồn tại!";
+            ViewBag.Error = ("Email", "Email already exists!");
             return View();
         }
 
         if (_userService.GetUserByUsername(Username) != null)
         {
-            ViewBag.Error = "Username đã tồn tại!";
+            ViewBag.Error = ("Username", "Username already exists!");
             return View();
         }
 

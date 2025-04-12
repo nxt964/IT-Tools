@@ -1,33 +1,46 @@
 @{
     Layout = "~/Views/Shared/_LayoutAuth.cshtml";
     ViewBag.Title = "Register";
+    var error = (ValueTuple<string, string>?)ViewBag.Error;
 }
 
-<form class="auth-container" asp-action="Register" method="post">
-    <div>
+<form  asp-action="Register" method="post">
+    <div class="mb-3">
         <label for="Username">Username:</label>
-        <input type="text" id="Username" name="Username" required />
+        <input class="mb-0" type="text" id="Username" name="Username" required />
+        @if (error?.Item1 == "Username")
+        {
+            <div style="color:red">@error?.Item2</div>
+        }
     </div>
-    <div>
+    <div class="mb-3">
         <label for="Email">Email:</label>
-        <input type="email" id="Email" name="Email" required />
+        <input class="mb-0" type="email" id="Email" name="Email" required />
+        @if (error?.Item1 == "Email")
+        {
+            <div style="color:red">@error?.Item2</div>
+        }
     </div>
-    <div>
+    <div class="mb-3">
         <label for="Password">Password:</label>
-        <input type="password" id="Password" name="Password" required />
+        <input class="mb-0" type="password" id="Password" name="Password" required />
     </div>
+    <div class="mb-3">
+        <label for="ConfirmPassword">Confirm Password:</label>
+        <input class="mb-0" type="password" id="ConfirmPassword" name="ConfirmPassword" required />
+        @if (error?.Item1 == "ConfirmPassword")
+        {
+            <div style="color:red;">@error?.Item2</div>
+        }
+    </div>
+    <button class="mt-2" type="submit">Register</button>
     <div>
-        <label for="ConfirmPassword">Please enter password again:</label>
-        <input type="password" id="ConfirmPassword" name="ConfirmPassword" required />
+        <p>Already have an account? <a asp-controller="Auth" asp-action="Login" class="fw-bold">Login now!</a></p>
+        <p>
+            <a asp-controller="Home" asp-action="Index" class="fw-bold fs-5">
+                Back to home
+                <i class="bi bi-house-door-fill"></i>
+            </a>
+        </p>
     </div>
-    <button type="submit">Register</button>
-    <p>Have an account? <a asp-controller="Auth" asp-action="Login">Login</a></p>
-    <p>Back home? <a asp-controller="Home" asp-action="Index">Home</a></p>
 </form>
-
-@if (ViewBag.Error != null)
-{
-    <div style="color: red;">
-        @ViewBag.Error
-    </div>
-}
