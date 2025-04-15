@@ -5,7 +5,7 @@
 }
 
 <form  asp-action="Register" method="post">
-    <div class="mb-3">
+    <div class="mb-2">
         <label for="Username">Username:</label>
         <input class="mb-0" type="text" id="Username" name="Username" required />
         @if (error?.Item1 == "Username")
@@ -13,7 +13,7 @@
             <div style="color:red">@error?.Item2</div>
         }
     </div>
-    <div class="mb-3">
+    <div class="mb-2">
         <label for="Email">Email:</label>
         <input class="mb-0" type="email" id="Email" name="Email" required />
         @if (error?.Item1 == "Email")
@@ -21,11 +21,11 @@
             <div style="color:red">@error?.Item2</div>
         }
     </div>
-    <div class="mb-3">
+    <div class="mb-2">
         <label for="Password">Password:</label>
         <input class="mb-0" type="password" id="Password" name="Password" required />
     </div>
-    <div class="mb-3">
+    <div class="mb-2">
         <label for="ConfirmPassword">Confirm Password:</label>
         <input class="mb-0" type="password" id="ConfirmPassword" name="ConfirmPassword" required />
         @if (error?.Item1 == "ConfirmPassword")
