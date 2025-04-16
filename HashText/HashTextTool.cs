@@ -28,7 +28,7 @@ namespace HashText
             {
                 var json = input?.ToString();
                 if (string.IsNullOrWhiteSpace(json)) return new { result = "Invalid Request." };
-                Console.WriteLine($"HashTextTool: {json}");
+
                 var request = JsonSerializer.Deserialize<HashTextRequest>(json);
                 if (request == null || string.IsNullOrEmpty(request.InputText))
                     return new { result = "Invalid Request" };
@@ -42,7 +42,7 @@ namespace HashText
                     { "SHA3", ComputeHash(request.InputText, Sha3.Sha3512(), request.OutputFormat) },
                     { "SHA384", ComputeHash(request.InputText, Sha3.Sha3384(), request.OutputFormat) }
                 };
-                Console.WriteLine($"HashTextTool: {JsonSerializer.Serialize(hashResults)}");
+
                 return new { result = hashResults }; 
             }
             catch (Exception ex)

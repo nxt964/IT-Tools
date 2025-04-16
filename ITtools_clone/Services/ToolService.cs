@@ -15,6 +15,7 @@ namespace ITtools_clone.Services
         void AddTool(Tool tool);
         void UpdateTool(Tool tool);
         void DeleteTool(int id);
+        bool DeleteToolWithRelatedData(int toolId);
         bool ValidateTool(Tool tool);
         Tool GetToolByName(string toolName);
         List<Tool> SearchTools(string query, bool isAdmin, bool isPremiumUser);
@@ -23,11 +24,17 @@ namespace ITtools_clone.Services
     public class ToolService : IToolService
     {
         private readonly IToolRepository _toolRepository;
+        private readonly IPluginRepository _pluginRepository;
+        private readonly IFavouriteRepository _favouriteRepository;
 
-        public ToolService(IToolRepository toolRepository)
+        public ToolService(IToolRepository toolRepository, IPluginRepository pluginRepository, IFavouriteRepository favouriteRepository)
         {
             _toolRepository = toolRepository;
+            _pluginRepository = pluginRepository;
+            _favouriteRepository = favouriteRepository;
         }
+
+        
 
         public List<Tool> GetAllTools()
         {
@@ -110,6 +117,35 @@ namespace ITtools_clone.Services
         public void DeleteTool(int id)
         {
             _toolRepository.DeleteTool(id);
+        }
+
+        public bool DeleteToolWithRelatedData(int toolId)
+        {
+            try
+            {
+                // Get tool for its file name
+                var tool = GetToolById(toolId);
+                if (tool == null) return false;
+                
+                // Delete physical file if exists
+                if (!string.IsNullOrEmpty(tool.file_name))
+                {
+                    _pluginRepository.DeletePluginFile(tool.file_name);
+                }
+                
+                // Delete favorites
+                _favouriteRepository.RemoveFromFavouritesByToolId(toolId);
+                
+                // Delete tool record
+                DeleteTool(toolId);
+                
+                return true;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error in DeleteToolWithRelatedData: {ex.Message}");
+                return false;
+            }
         }
 
         public bool ValidateTool(Tool tool)
