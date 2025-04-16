@@ -90,14 +90,8 @@ namespace ITtools_clone.Controllers
                 bool isPremiumUser = HttpContext.Session.GetInt32("Premium") == 1;
                 int? userId = HttpContext.Session.GetInt32("UserId");
 
-                var allTools = isAdmin 
-                    ? _toolService.GetAllTools() 
-                    : _toolService.GetEnabledTools();
-
-                var filteredTools = allTools
-                    .Where(t => t.tool_name.Contains(query, StringComparison.OrdinalIgnoreCase) || 
-                                t.description.Contains(query, StringComparison.OrdinalIgnoreCase))
-                    .ToList();
+                // Use dedicated search method from service
+                var filteredTools = _toolService.SearchTools(query, isAdmin, isPremiumUser);
 
                 var favouriteToolsId = (userId != null) 
                     ? _favouriteService.GetFavouriteToolsByUserId(userId.Value).Select(t => t.tid).ToList() 

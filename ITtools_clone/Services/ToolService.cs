@@ -17,6 +17,7 @@ namespace ITtools_clone.Services
         void DeleteTool(int id);
         bool ValidateTool(Tool tool);
         Tool GetToolByName(string toolName);
+        List<Tool> SearchTools(string query, bool isAdmin, bool isPremiumUser);
     }
 
     public class ToolService : IToolService
@@ -58,12 +59,22 @@ namespace ITtools_clone.Services
         // Modified method to consider premium status
         public Dictionary<string, List<string>> GetCategorizedTools(bool isAdmin = false, bool isPremiumUser = false)
         {
-            var tools = isAdmin ? GetAllTools() : GetEnabledTools();
+            var toolsByCategory = _toolRepository.GetToolsByCategory(!isAdmin);
             
-            return tools
-                .Where(t => !string.IsNullOrEmpty(t.category_name))
-                .GroupBy(t => t.category_name!)
-                .ToDictionary(g => g.Key, g => g.Select(t => t.tool_name!).ToList());
+            // Apply business logic for premium filtering
+            if (!isPremiumUser)
+            {
+                toolsByCategory = toolsByCategory.ToDictionary(
+                    category => category.Key,
+                    category => category.Value.Where(t => !t.premium_required).ToList()
+                );
+            }
+            
+            // Transform to required output format
+            return toolsByCategory.ToDictionary(
+                category => category.Key,
+                category => category.Value.Select(t => t.tool_name!).ToList()
+            );
         }
 
         public Tool GetToolById(int id)
@@ -115,9 +126,20 @@ namespace ITtools_clone.Services
 
         public Tool GetToolByName(string toolName)
         {
-            return _toolRepository.GetAllTools()
-                .FirstOrDefault(t => t.tool_name != null && 
-                                   t.tool_name.Equals(toolName, StringComparison.OrdinalIgnoreCase));
+            return _toolRepository.GetToolByName(toolName);
+        }
+
+        public List<Tool> SearchTools(string query, bool isAdmin, bool isPremiumUser)
+        {
+            var searchResults = _toolRepository.SearchTools(query, !isAdmin);
+            
+            // Apply premium filtering if needed
+            if (!isPremiumUser)
+            {
+                searchResults = searchResults.Where(t => !t.premium_required).ToList();
+            }
+            
+            return searchResults;
         }
     }
 }
