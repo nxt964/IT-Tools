@@ -47,8 +47,11 @@ public class PluginController : Controller
     [Route("{pluginSlugName}")]
     public IActionResult LoadTool(string pluginSlugName)
     {
-        var plugin = PluginLoader.GetPlugins().FirstOrDefault(p => Utils.Slugify(p.Name) == pluginSlugName);
-        if (plugin == null) return NotFound("Plugin not found");
+        var plugin = _pluginService.GetPluginByName(pluginSlugName);
+        if (plugin == null)
+        {
+            return NotFound("Plugin not found.");
+        }
 
         ViewBag.PluginName = plugin.Name;
         ViewBag.PluginUI = plugin.GetUI();
@@ -59,10 +62,12 @@ public class PluginController : Controller
     [Route("{pluginSlugName}/execute")]
     public IActionResult ExecuteTool(string pluginSlugName, [FromBody] object inputData)
     {
-        var plugin = PluginLoader.GetPlugins().FirstOrDefault(p => Utils.Slugify(p.Name) == pluginSlugName);
-        if (plugin == null) return NotFound("Plugin not found");
-
-        // Thực thi công cụ và lấy kết quả
+        var plugin = _pluginService.GetPluginByName(pluginSlugName);
+        if (plugin == null)
+        {
+            return NotFound("Plugin not found.");
+        }
+        
         object result = plugin.Execute(inputData);
 
         return Json(new { success = true, result });

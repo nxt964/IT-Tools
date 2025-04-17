@@ -3,10 +3,12 @@ using ITtools_clone.Repositories;
 using ITtools_clone.Services;
 using ITtools_clone.Models;
 using ITtools_clone.Helpers;
+using ToolInterface;
 
 public interface IPluginService
 {
     Task<(bool Success, string Message, Tool Tool)> AddPluginFromFile(IFormFile file);
+    ITool? GetPluginByName(string pluginName);
 
 }
 
@@ -84,4 +86,9 @@ public class PluginService : IPluginService
         }
     }
     
+    public ITool? GetPluginByName(string pluginName)
+    {
+        return PluginLoader.GetPlugins().FirstOrDefault(p => 
+            Utils.Slugify(p.Name) == pluginName);
+    }
 }
