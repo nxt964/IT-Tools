@@ -10,12 +10,10 @@ public class PluginController : Controller
 {
     private readonly string pluginPath = Path.Combine(Directory.GetCurrentDirectory(), "Plugins");
     private readonly IPluginService _pluginService;
-    private readonly IHttpContextAccessor _httpContextAccessor;
 
-    public PluginController(IPluginService pluginService ,IHttpContextAccessor httpContextAccessor)
+    public PluginController(IPluginService pluginService)
     {
         _pluginService = pluginService;
-        _httpContextAccessor = httpContextAccessor;
     }
 
     [HttpGet]
@@ -47,7 +45,7 @@ public class PluginController : Controller
     [Route("{pluginSlugName}")]
     public IActionResult LoadTool(string pluginSlugName)
     {
-        var plugin = _pluginService.GetPluginByName(pluginSlugName);
+        var plugin = _pluginService.GetPluginBySlugName(pluginSlugName, checkEnabled: !(HttpContext.Session.GetInt32("isAdmin") == 1));
         if (plugin == null)
         {
             return NotFound("Plugin not found.");
@@ -62,7 +60,7 @@ public class PluginController : Controller
     [Route("{pluginSlugName}/execute")]
     public IActionResult ExecuteTool(string pluginSlugName, [FromBody] object inputData)
     {
-        var plugin = _pluginService.GetPluginByName(pluginSlugName);
+        var plugin = _pluginService.GetPluginBySlugName(pluginSlugName, checkEnabled: !(HttpContext.Session.GetInt32("isAdmin") == 1));
         if (plugin == null)
         {
             return NotFound("Plugin not found.");

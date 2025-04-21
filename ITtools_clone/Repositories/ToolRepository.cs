@@ -40,7 +40,7 @@ namespace ITtools_clone.Repositories
         {
             return _context.Tools
                 .FirstOrDefault(t => t.tool_name != null && 
-                                 t.tool_name.Equals(toolName, StringComparison.OrdinalIgnoreCase));
+                                 t.tool_name.ToLower() == toolName.ToLower());
         }
 
         public Dictionary<string, List<Tool>> GetToolsByCategory(bool enabledOnly)

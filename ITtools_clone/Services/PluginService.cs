@@ -8,7 +8,7 @@ using ToolInterface;
 public interface IPluginService
 {
     Task<(bool Success, string Message, Tool Tool)> AddPluginFromFile(IFormFile file);
-    ITool? GetPluginByName(string pluginName);
+    ITool? GetPluginBySlugName(string pluginSlugName, bool checkEnabled);
 
     bool DeletePluginFile(string fileName);
 }
@@ -87,10 +87,15 @@ public class PluginService : IPluginService
         }
     }
     
-    public ITool? GetPluginByName(string pluginName)
+    public ITool? GetPluginBySlugName(string pluginSlugName, bool checkEnabled)
     {
+        var tool = _toolService.GetToolByName(Utils.Unslugify(pluginSlugName));
+        if (tool == null || (!tool.enabled && checkEnabled))
+        {
+            return null;
+        }
         return PluginLoader.GetPlugins().FirstOrDefault(p => 
-            Utils.Slugify(p.Name) == pluginName);
+            Utils.Slugify(p.Name) == pluginSlugName);
     }
 
     public bool DeletePluginFile(string fileName)
