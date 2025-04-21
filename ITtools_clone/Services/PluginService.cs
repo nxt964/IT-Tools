@@ -10,6 +10,7 @@ public interface IPluginService
     Task<(bool Success, string Message, Tool Tool)> AddPluginFromFile(IFormFile file);
     ITool? GetPluginByName(string pluginName);
 
+    bool DeletePluginFile(string fileName);
 }
 
 // Implementation
@@ -90,5 +91,10 @@ public class PluginService : IPluginService
     {
         return PluginLoader.GetPlugins().FirstOrDefault(p => 
             Utils.Slugify(p.Name) == pluginName);
+    }
+
+    public bool DeletePluginFile(string fileName)
+    {
+        return _pluginRepository.DeletePluginFile(fileName);
     }
 }

@@ -24,14 +24,14 @@ namespace ITtools_clone.Services
     public class ToolService : IToolService
     {
         private readonly IToolRepository _toolRepository;
-        private readonly IPluginRepository _pluginRepository;
-        private readonly IFavouriteRepository _favouriteRepository;
+        private readonly IPluginService _pluginService;
+        private readonly IFavouriteService _favouriteService;
 
-        public ToolService(IToolRepository toolRepository, IPluginRepository pluginRepository, IFavouriteRepository favouriteRepository)
+        public ToolService(IToolRepository toolRepository, IPluginService pluginService, IFavouriteService favouriteService)
         {
             _toolRepository = toolRepository;
-            _pluginRepository = pluginRepository;
-            _favouriteRepository = favouriteRepository;
+            _pluginService = pluginService;
+            _favouriteService = favouriteService;
         }
 
         
@@ -130,11 +130,11 @@ namespace ITtools_clone.Services
                 // Delete physical file if exists
                 if (!string.IsNullOrEmpty(tool.file_name))
                 {
-                    _pluginRepository.DeletePluginFile(tool.file_name);
+                    _pluginService.DeletePluginFile(tool.file_name);
                 }
                 
                 // Delete favorites
-                _favouriteRepository.RemoveFromFavouritesByToolId(toolId);
+                _favouriteService.RemoveFromFavouritesByToolId(toolId);
                 
                 // Delete tool record
                 DeleteTool(toolId);
