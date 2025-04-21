@@ -48,7 +48,7 @@ namespace ITtools_clone.Controllers
         }
 
         [HttpPost]
-        public IActionResult UpdateToolStatus(int id, bool enabled)
+        public IActionResult UpdateToolStatus(int id)
         {
             // Check if user is admin
             if (HttpContext.Session.GetInt32("isAdmin") != 1)
@@ -132,8 +132,13 @@ namespace ITtools_clone.Controllers
         }
 
         [HttpPost]
-        public IActionResult UpdateUserPremium(int id, bool premium)
+        public IActionResult UpdateUserPremium(int id)
         {
+            if (HttpContext.Session.GetInt32("isAdmin") != 1)
+            {
+                return RedirectToAction("Login", "Auth");
+            }
+            
             var user = _userService.GetUserById(id);
             if (user == null)
             {

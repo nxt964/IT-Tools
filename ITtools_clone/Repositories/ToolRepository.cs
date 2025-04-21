@@ -28,7 +28,7 @@ namespace ITtools_clone.Repositories
 
         public List<Tool> GetAllTools()
         {
-            return _context.Tools.ToList();
+            return _context.Tools.ToList().OrderBy(t => t.category_name).ToList();
         }
 
         public Tool? GetToolById(int id)
