@@ -10,7 +10,7 @@ namespace ITtools_clone.Services
         List<Tool> GetAllTools();
         List<Tool> GetEnabledTools();
         List<Tool> GetToolsForUser(bool isPremiumUser);
-        Dictionary<string, List<string>> GetCategorizedTools(bool isAdmin, bool isPremiumUser);
+        Dictionary<string, List<string>> GetCategorizedTools(bool isAdmin);
         Tool GetToolById(int id);
         void AddTool(Tool tool);
         void UpdateTool(Tool tool);
@@ -24,13 +24,13 @@ namespace ITtools_clone.Services
     public class ToolService : IToolService
     {
         private readonly IToolRepository _toolRepository;
-        private readonly IPluginService _pluginService;
+        private readonly IPluginRepository _pluginRepository;
         private readonly IFavouriteService _favouriteService;
 
-        public ToolService(IToolRepository toolRepository, IPluginService pluginService, IFavouriteService favouriteService)
+        public ToolService(IToolRepository toolRepository, IPluginRepository pluginRepository, IFavouriteService favouriteService)
         {
             _toolRepository = toolRepository;
-            _pluginService = pluginService;
+            _pluginRepository = pluginRepository;
             _favouriteService = favouriteService;
         }
 
@@ -64,18 +64,9 @@ namespace ITtools_clone.Services
         }
 
         // Modified method to consider premium status
-        public Dictionary<string, List<string>> GetCategorizedTools(bool isAdmin = false, bool isPremiumUser = false)
+        public Dictionary<string, List<string>> GetCategorizedTools(bool isAdmin)
         {
-            var toolsByCategory = _toolRepository.GetToolsByCategory(!isAdmin);
-            
-            // Apply business logic for premium filtering
-            if (!isPremiumUser)
-            {
-                toolsByCategory = toolsByCategory.ToDictionary(
-                    category => category.Key,
-                    category => category.Value.Where(t => !t.premium_required).ToList()
-                );
-            }
+            var toolsByCategory = _toolRepository.GetToolsByCategory(enabledOnly: !isAdmin);
             
             // Transform to required output format
             return toolsByCategory.ToDictionary(
@@ -130,7 +121,7 @@ namespace ITtools_clone.Services
                 // Delete physical file if exists
                 if (!string.IsNullOrEmpty(tool.file_name))
                 {
-                    _pluginService.DeletePluginFile(tool.file_name);
+                    _pluginRepository.DeletePluginFile(tool.file_name);
                 }
                 
                 // Delete favorites
