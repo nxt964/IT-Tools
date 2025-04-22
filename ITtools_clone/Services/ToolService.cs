@@ -18,7 +18,7 @@ namespace ITtools_clone.Services
         bool DeleteToolWithRelatedData(int toolId);
         bool ValidateTool(Tool tool);
         Tool GetToolByName(string toolName);
-        List<Tool> SearchTools(string query, bool isAdmin, bool isPremiumUser);
+        List<Tool> SearchTools(string query, bool isAdmin);
     }
 
     public class ToolService : IToolService
@@ -156,15 +156,9 @@ namespace ITtools_clone.Services
             return _toolRepository.GetToolByName(toolName);
         }
 
-        public List<Tool> SearchTools(string query, bool isAdmin, bool isPremiumUser)
+        public List<Tool> SearchTools(string query, bool isAdmin)
         {
             var searchResults = _toolRepository.SearchTools(query, !isAdmin);
-            
-            // Apply premium filtering if needed
-            if (!isPremiumUser)
-            {
-                searchResults = searchResults.Where(t => !t.premium_required).ToList();
-            }
             
             return searchResults;
         }
