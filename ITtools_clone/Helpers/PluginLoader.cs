@@ -1,31 +1,56 @@
 ﻿using System.Reflection;
 using System.Runtime.Loader;
+using ITtools_clone.Models;
+using ITtools_clone.Services;
 using ToolInterface;
 
-public static class PluginLoader
+public class PluginLoader
 {
     private static readonly List<ITool> _plugins = new();
     private static readonly Dictionary<string, (AssemblyLoadContext Context, Assembly Assembly)> _loadedAssemblies = new();
     private static FileSystemWatcher? _watcher;
     public static List<ITool> GetPlugins() => _plugins;
+    private readonly IServiceProvider _serviceProvider;
 
-    static PluginLoader()
+    public PluginLoader(IServiceProvider serviceProvider)
     {
-        LoadPlugins();
+        _serviceProvider = serviceProvider;
     }
 
-    public static void LoadPlugins()
+    public void LoadPlugins()
     {
         string pluginsPath = Path.Combine(Directory.GetCurrentDirectory(), "Plugins");
 
         if (!Directory.Exists(pluginsPath))
             Directory.CreateDirectory(pluginsPath);
 
+        // Xóa toàn bộ tools trong DB
+        using var scope = _serviceProvider.CreateScope();
+        var toolService = scope.ServiceProvider.GetRequiredService<IToolService>();
+        var allTools = toolService.GetAllTools();
+        foreach (var tool in allTools)
+        {
+            toolService.DeleteTool(tool.tid);
+        }
+
         // Load các plugin hiện có
+        int count = 1;
         foreach (string file in Directory.GetFiles(pluginsPath, "*.dll"))
         {
-            LoadPlugin(file);
-        }
+            var plugin = LoadPlugin(file);
+            var tool = new Tool
+            {
+                tid = count++,
+                tool_name = plugin.Name,
+                description = plugin.Description,
+                enabled = true,
+                premium_required = false,
+                category_name = plugin.Category,
+                file_name = Path.GetFileName(file)
+            };
+
+            toolService.AddTool(tool);
+        }   
 
         // Theo dõi thay đổi thư mục Plugins
         _watcher = new FileSystemWatcher(pluginsPath, "*.dll")

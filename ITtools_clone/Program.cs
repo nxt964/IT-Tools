@@ -30,8 +30,11 @@ namespace ITtools_clone
             });
             builder.Services.AddHttpContextAccessor();
 
-            // Đăng ký Logging
+            // Register Logging
             builder.Services.AddLogging();
+
+            // Register Loader
+            builder.Services.AddSingleton<PluginLoader>();
 
             // Register repositories
             builder.Services.AddScoped<IUserRepository, UserRepository>();
@@ -48,6 +51,9 @@ namespace ITtools_clone
             builder.Services.AddDistributedMemoryCache(); // Lưu trữ session trong bộ nhớ
 
             var app = builder.Build();
+
+            var pluginLoader = app.Services.GetRequiredService<PluginLoader>();
+            pluginLoader.LoadPlugins(); // Tải các plugin khi ứng dụng khởi động
 
             // Kiểm tra kết nối MySQL TRƯỚC KHI CHẠY ỨNG DỤNG
             using (var scope = app.Services.CreateScope())
