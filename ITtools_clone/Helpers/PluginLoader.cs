@@ -10,12 +10,12 @@ public class PluginLoader
     private static readonly Dictionary<string, (AssemblyLoadContext Context, Assembly Assembly)> _loadedAssemblies = new();
     private static FileSystemWatcher? _watcher;
     public static List<ITool> GetPlugins() => _plugins;
-    private readonly IServiceProvider _serviceProvider;
+    // private readonly IServiceProvider _serviceProvider;
 
-    public PluginLoader(IServiceProvider serviceProvider)
-    {
-        _serviceProvider = serviceProvider;
-    }
+    // public PluginLoader(IServiceProvider serviceProvider)
+    // {
+    //     _serviceProvider = serviceProvider;
+    // }
 
     public void LoadPlugins()
     {
@@ -24,32 +24,32 @@ public class PluginLoader
         if (!Directory.Exists(pluginsPath))
             Directory.CreateDirectory(pluginsPath);
 
-        // Xóa toàn bộ tools trong DB
-        using var scope = _serviceProvider.CreateScope();
-        var toolService = scope.ServiceProvider.GetRequiredService<IToolService>();
-        var allTools = toolService.GetAllTools();
-        foreach (var tool in allTools)
-        {
-            toolService.DeleteTool(tool.tid);
-        }
+        // // Xóa toàn bộ tools trong DB
+        // using var scope = _serviceProvider.CreateScope();
+        // var toolService = scope.ServiceProvider.GetRequiredService<IToolService>();
+        // var allTools = toolService.GetAllTools();
+        // foreach (var tool in allTools)
+        // {
+        //     toolService.DeleteTool(tool.tid);
+        // }
 
         // Load các plugin hiện có
-        int count = 1;
+        // int count = 1;
         foreach (string file in Directory.GetFiles(pluginsPath, "*.dll"))
         {
             var plugin = LoadPlugin(file);
-            var tool = new Tool
-            {
-                tid = count++,
-                tool_name = plugin.Name,
-                description = plugin.Description,
-                enabled = true,
-                premium_required = false,
-                category_name = plugin.Category,
-                file_name = Path.GetFileName(file)
-            };
+            // var tool = new Tool
+            // {
+            //     tid = count++,
+            //     tool_name = plugin.Name,
+            //     description = plugin.Description,
+            //     enabled = true,
+            //     premium_required = false,
+            //     category_name = plugin.Category,
+            //     file_name = Path.GetFileName(file)
+            // };
 
-            toolService.AddTool(tool);
+            // toolService.AddTool(tool);
         }   
 
         // Theo dõi thay đổi thư mục Plugins
